@@ -6,13 +6,21 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.Json;
 
-var mode = args.FirstOrDefault() ?? "resume";
+var mode = args.FirstOrDefault();
+if (mode is null or "-h" or "--help") {
+  Console.WriteLine("CoreAudit modes: changed-payload | session | save-failure | transitions | metadata-stop");
+  Console.WriteLine("Observations may describe defects even when this diagnostic process exits successfully.");
+  return 0;
+}
+if (mode is not ("changed-payload" or "session" or "save-failure" or "transitions" or "metadata-stop")) {
+  Console.Error.WriteLine("Unknown mode. Use --help for the supported audit scenarios.");
+  return 2;
+}
 var root = Path.Combine(Path.GetTempPath(), "cursetorrent-audit-" + mode + "-" + Guid.NewGuid().ToString("N"));
 Directory.CreateDirectory(root);
 Console.WriteLine($"AUDIT mode={mode} root={root}");
 try {
-  if(mode=="resume") await ResumeAudit(root);
-  else if(mode=="metadata-stop") await MetadataStopAudit(root);
+  if(mode=="metadata-stop") await MetadataStopAudit(root);
   else if(mode=="session") await SessionAudit(root);
   else if(mode=="changed-payload") await ChangedPayloadAudit(root);
   else if(mode=="save-failure") await SaveFailureAudit(root);
@@ -33,30 +41,6 @@ static async Task<(string metadata, string seeds, string filename, byte[] bytes)
   var creator=new TorrentCreator(TorrentType.V1Only){PieceLength=32*1024};
   await creator.CreateAsync(new TorrentFileSource(Path.Combine(seeds,filename)),metadata);
   return(metadata,seeds,filename,bytes);
-}
-static async Task ResumeAudit(string root) {
-  var f=await Fixture(root);
-  await using var service=new TorrentService(Path.Combine(root,"state"),true);
-  await service.InitializeAsync();
-  var id=await service.AddAsync(new(f.metadata,f.seeds,false));
-  await service.RecheckAsync(id);
-  await Until(()=>service.GetSnapshots().Single().Progress>=99.999 && service.GetSnapshots().Single().State!=DownloadState.Checking,"initial complete check");
-  Console.WriteLine("original_verified="+JsonSerializer.Serialize(service.GetSnapshots().Single()));
-  await service.RemoveAsync(id);
-  var different=Path.Combine(root,"different-download-directory"); Directory.CreateDirectory(different);
-  var corrupt=new byte[f.bytes.Length]; Array.Fill(corrupt,(byte)0x7F);
-  await File.WriteAllBytesAsync(Path.Combine(different,f.filename),corrupt);
-  id=await service.AddAsync(new(f.metadata,different,false));
-  Console.WriteLine("readded_paused="+JsonSerializer.Serialize(service.GetSnapshots().Single()));
-  await service.ResumeAsync(id);
-  await Until(()=>service.GetSnapshots().Single().State is DownloadState.Seeding or DownloadState.Error,"start with stale resume");
-  Console.WriteLine("readded_running="+JsonSerializer.Serialize(service.GetSnapshots().Single()));
-  Console.WriteLine("expected_sha256="+Convert.ToHexString(SHA256.HashData(f.bytes)));
-  Console.WriteLine("actual_sha256="+Convert.ToHexString(SHA256.HashData(await File.ReadAllBytesAsync(Path.Combine(different,f.filename)))));
-  await service.PauseAsync(id);
-  await service.RecheckAsync(id);
-  await Until(()=>service.GetSnapshots().Single().State!=DownloadState.Checking,"manual recheck");
-  Console.WriteLine("after_manual_recheck="+JsonSerializer.Serialize(service.GetSnapshots().Single()));
 }
 static async Task MetadataStopAudit(string root) {
   using var sink=new UdpClient(new IPEndPoint(IPAddress.Loopback,0));

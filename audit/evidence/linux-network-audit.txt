@@ -1,0 +1,7 @@
+PASS V1Only torrent full transfer; UTF-8 filename; exact SHA-256; bytes=534328; state=Seeding
+PASS V1Only magnet metadata + full transfer; cold=True; exact SHA-256; files=2; elapsed=1.22s
+PASS V2Only torrent full transfer; UTF-8 filename; exact SHA-256; bytes=534328; state=Seeding
+PASS V2Only magnet metadata + full transfer; cold=True; exact SHA-256; files=2; elapsed=0.69s
+PASS V1V2Hybrid torrent full transfer; UTF-8 filename; exact SHA-256; bytes=534328; state=Seeding
+PASS V1V2Hybrid magnet metadata + full transfer; cold=True; exact SHA-256; files=2; elapsed=0.90s
+NETWORK_AUDIT_RESULT failures=0

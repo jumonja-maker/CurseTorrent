@@ -1,0 +1,32 @@
+AUDIT mode=transitions root=/tmp/cursetorrent-audit-transitions-db25a38850374adfa17c6a84de9d19b3
+CHECK PASS: recheck/resume/pause iteration 0
+CHECK PASS: recheck/resume/pause iteration 1
+CHECK PASS: recheck/resume/pause iteration 2
+CHECK PASS: recheck/resume/pause iteration 3
+CHECK PASS: recheck/resume/pause iteration 4
+CHECK PASS: recheck/resume/pause iteration 5
+CHECK PASS: recheck/resume/pause iteration 6
+CHECK PASS: recheck/resume/pause iteration 7
+CHECK PASS: recheck/resume/pause iteration 8
+CHECK PASS: recheck/resume/pause iteration 9
+CHECK PASS: recheck/resume/pause iteration 10
+CHECK PASS: recheck/resume/pause iteration 11
+CHECK PASS: recheck/resume/pause iteration 12
+CHECK PASS: recheck/resume/pause iteration 13
+CHECK PASS: recheck/resume/pause iteration 14
+CHECK PASS: recheck/resume/pause iteration 15
+CHECK PASS: recheck/resume/pause iteration 16
+CHECK PASS: recheck/resume/pause iteration 17
+CHECK PASS: recheck/resume/pause iteration 18
+CHECK PASS: recheck/resume/pause iteration 19
+CHECK PASS: immediate recheck/remove iteration 0
+CHECK PASS: immediate recheck/remove iteration 1
+CHECK PASS: immediate recheck/remove iteration 2
+CHECK PASS: immediate recheck/remove iteration 3
+CHECK PASS: immediate recheck/remove iteration 4
+CHECK PASS: immediate recheck/remove iteration 5
+CHECK PASS: immediate recheck/remove iteration 6
+CHECK PASS: immediate recheck/remove iteration 7
+CHECK PASS: immediate recheck/remove iteration 8
+CHECK PASS: immediate recheck/remove iteration 9
+CHECK PASS: service remains healthy after control transitions

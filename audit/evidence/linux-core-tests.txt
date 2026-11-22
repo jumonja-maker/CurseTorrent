@@ -1,0 +1,45 @@
+  PASS 01: Local seeder validates real deterministic payload
+  PASS 02: Invalid input rejected
+  PASS 03: Invalid input rejected
+  PASS 04: Invalid input rejected
+  PASS 05: Malformed imports do not add phantom transfers
+  PASS 06: Negative download limit rejected
+  PASS 07: Overflowing upload limit rejected
+  PASS 08: Invalid port rejected
+  PASS 09: Torrent preview reads actual metadata and file list
+  PASS 10: Paused import has metadata
+  PASS 11: Import applies selective file download before transfer
+  PASS 12: Duplicate info hash rejected
+  PASS 13: Duplicate import keeps one transfer
+  PASS 14: Pause interrupts an actual partial download and exposes paused state (state=Paused, progress=3.12%)
+  PASS 15: Selected payload size excludes skipped files
+  PASS 16: Session restores after the original .torrent file is deleted
+  PASS 17: Settings survive an application restart
+  PASS 18: Restart preserves paused intent
+  PASS 19: Restart preserves per-file priorities
+  PASS 20: Resumed selected payload matches source SHA-256
+  PASS 21: Removing a transfer retains downloaded data
+  PASS 22: Magnet preview validates the link
+  PASS 23: Cold magnet begins without cached metadata
+  PASS 24: Pause also stops magnet metadata acquisition
+  PASS 25: Magnet download alpha matches source SHA-256
+  PASS 26: Magnet download beta matches source SHA-256
+  PASS 27: Recheck verifies completed on-disk content
+  PASS 28: Removing immediately after requesting a recheck is safe
+  PASS 29: Fixture identifies cached metadata without private schema assumptions
+  PASS 30: One damaged cached torrent does not prevent restoring another transfer
+  PASS 31: Damaged imported metadata is reported to the user during recovery
+  PASS 32: Session restoration never deletes retained downloads
+  PASS 33: Removed transfers stay removed after restart
+  PASS 34: Application uploads real payload to a second local client
+  PASS 35: Pause preserves cumulative upload bytes after the engine resets its monitor
+  PASS 36: Cumulative upload bytes survive application restart
+  PASS 37: Paused seeding remains paused after restart
+  PASS 38: Fast-resume safely restores a completed .!mt file during manager registration
+  PASS 39: A torrent cannot alias another file's .!mt partial path
+  PASS 40: Two torrent files cannot own the same destination path
+  PASS 41: Magnet collision is reported after real peer-supplied metadata
+  PASS 42: Rejected magnet cannot truncate or overwrite another torrent's existing payload
+  PASS 43: Zero-byte magnet collision is rejected before entering payload mode
+  PASS 44: Zero-byte magnet cannot truncate an existing nonempty payload
+PASS: 44 checks; real loopback BitTorrent transfer, 5.9s.

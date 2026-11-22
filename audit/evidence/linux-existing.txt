@@ -1,0 +1,6 @@
+MODE=existing root=/tmp/cursetorrent-security-46fc67788db94f2fa46017d6fd13d41f
+BEFORE path=/tmp/cursetorrent-security-46fc67788db94f2fa46017d6fd13d41f/downloads/notes.txt; length=131072; sha256=55A3534E3D7E36F887D2784617C97AB7639FA7675283A25086CFD38540D850A5
+Added paused. Original length=131072
+State=Paused; error=; files=notes.txt:Normal
+AFTER path=/tmp/cursetorrent-security-46fc67788db94f2fa46017d6fd13d41f/downloads/notes.txt.!mt; length=32768; sha256=D6C3D486C31821DF5BEF94FB5E8677C2154892851D6ADF07CD8E8003BD634109
+Remaining files=/tmp/cursetorrent-security-46fc67788db94f2fa46017d6fd13d41f/downloads/notes.txt.!mt

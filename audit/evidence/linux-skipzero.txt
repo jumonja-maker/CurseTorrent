@@ -1,0 +1,6 @@
+MODE=skipzero root=/tmp/cursetorrent-security-7ff7625206fe43ed967e624f719bdb37
+BEFORE path=/tmp/cursetorrent-security-7ff7625206fe43ed967e624f719bdb37/downloads/Example/notes.txt; length=131072; sha256=55A3534E3D7E36F887D2784617C97AB7639FA7675283A25086CFD38540D850A5
+Added paused. Original length=131072
+State=Downloading; error=; files=notes.txt:Skip|payload.bin:Normal
+AFTER path=/tmp/cursetorrent-security-7ff7625206fe43ed967e624f719bdb37/downloads/Example/notes.txt; length=0; sha256=E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+Remaining files=/tmp/cursetorrent-security-7ff7625206fe43ed967e624f719bdb37/downloads/Example/payload.bin.!mt|/tmp/cursetorrent-security-7ff7625206fe43ed967e624f719bdb37/downloads/Example/notes.txt

@@ -1,0 +1,8 @@
+  CurseTorrent.Core -> /workspace/scratch/e9d6e7421650/CurseTorrent/src/CurseTorrent.Core/bin/Release/net10.0/CurseTorrent.Core.dll
+  CurseTorrent.App -> /workspace/scratch/e9d6e7421650/CurseTorrent/src/CurseTorrent.App/bin/Release/net10.0-windows/CurseTorrent.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:07.76

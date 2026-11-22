@@ -1,0 +1,489 @@
+﻿2026-11-22T07:18:23.3626126Z Current runner version: '2.338.2'
+2026-11-22T07:18:23.3651538Z ##[group]Runner Image Provisioner
+2026-11-22T07:18:23.3652400Z Hosted Compute Agent
+2026-11-22T07:18:23.3652954Z Version: 20261111.635
+2026-11-22T07:18:23.3653583Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-22T07:18:23.3654276Z Build Date: 2026-11-11T01:49:01Z
+2026-11-22T07:18:23.3654922Z Worker ID: {e2b373b7-57ff-4426-a705-1f28af9ce1a5}
+2026-11-22T07:18:23.3655614Z Region: westus3
+2026-11-22T07:18:23.3656158Z Cloud: Azure
+2026-11-22T07:18:23.3656669Z ##[endgroup]
+2026-11-22T07:18:23.3657971Z ##[group]Operating System
+2026-11-22T07:18:23.3658596Z Microsoft Windows Server 2025
+2026-11-22T07:18:23.3659259Z 10.0.26100
+2026-11-22T07:18:23.3659749Z Datacenter
+2026-11-22T07:18:23.3660257Z ##[endgroup]
+2026-11-22T07:18:23.3660770Z ##[group]Runner Image
+2026-11-22T07:18:23.3661636Z Image: windows-2025-vs2026
+2026-11-22T07:18:23.3662260Z Version: 20261116.315.1
+2026-11-22T07:18:23.3663697Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261116.315/images/windows/Windows2025-VS2026-Readme.md
+2026-11-22T07:18:23.3665602Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261116.315
+2026-11-22T07:18:23.3666563Z ##[endgroup]
+2026-11-22T07:18:23.3667675Z ##[group]GITHUB_TOKEN Permissions
+2026-11-22T07:18:23.3669460Z Contents: read
+2026-11-22T07:18:23.3670097Z Metadata: read
+2026-11-22T07:18:23.3670627Z ##[endgroup]
+2026-11-22T07:18:23.3672744Z Secret source: Actions
+2026-11-22T07:18:23.3673670Z Cache mode: write
+2026-11-22T07:18:23.3674363Z Prepare workflow directory
+2026-11-22T07:18:23.4145572Z Prepare all required actions
+2026-11-22T07:18:23.4216514Z Getting action download info
+2026-11-22T07:18:23.7101024Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-22T07:18:23.8585741Z Download action repository 'actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73' (SHA:0f4a354dd5547a28c70b7853dbd95d5b67886e73)
+2026-11-22T07:18:24.6220578Z Complete job name: windows-audit
+2026-11-22T07:18:24.7802507Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-22T07:18:24.7803802Z with:
+2026-11-22T07:18:24.7804254Z   persist-credentials: false
+2026-11-22T07:18:24.7805272Z   repository: jumonja-maker/CurseTorrent
+2026-11-22T07:18:24.7809316Z   token: ***
+2026-11-22T07:18:24.7809757Z   ssh-strict: true
+2026-11-22T07:18:24.7810193Z   ssh-user: git
+2026-11-22T07:18:24.7810620Z   clean: true
+2026-11-22T07:18:24.7811056Z   sparse-checkout-cone-mode: true
+2026-11-22T07:18:24.7811588Z   fetch-depth: 1
+2026-11-22T07:18:24.7812020Z   fetch-tags: false
+2026-11-22T07:18:24.7812463Z   show-progress: true
+2026-11-22T07:18:24.7812908Z   lfs: false
+2026-11-22T07:18:24.7813333Z   submodules: false
+2026-11-22T07:18:24.7813790Z   set-safe-directory: true
+2026-11-22T07:18:24.7814303Z   allow-unsafe-pr-checkout: false
+2026-11-22T07:18:24.7815103Z env:
+2026-11-22T07:18:24.7815577Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:18:24.7816102Z   DOTNET_NOLOGO: 1
+2026-11-22T07:18:24.7816570Z ##[endgroup]
+2026-11-22T07:18:24.9401598Z Syncing repository: jumonja-maker/CurseTorrent
+2026-11-22T07:18:24.9403688Z ##[group]Getting Git version info
+2026-11-22T07:18:24.9404496Z Working directory is 'D:\a\CurseTorrent\CurseTorrent'
+2026-11-22T07:18:25.0354173Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-22T07:18:25.3776535Z git version 2.56.1.windows.1
+2026-11-22T07:18:25.3828674Z ##[endgroup]
+2026-11-22T07:18:25.3845074Z Temporarily overriding HOME='D:\a\_temp\0a600b19-bb8a-48b9-a11b-b85bad35600f' before making global git config changes
+2026-11-22T07:18:25.3847383Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-22T07:18:25.3855710Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\CurseTorrent\CurseTorrent
+2026-11-22T07:18:25.4573481Z Deleting the contents of 'D:\a\CurseTorrent\CurseTorrent'
+2026-11-22T07:18:25.4582055Z ##[group]Determining repository object format
+2026-11-22T07:18:25.4586199Z ##[endgroup]
+2026-11-22T07:18:25.4588282Z ##[group]Initializing the repository
+2026-11-22T07:18:25.4596408Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\CurseTorrent\CurseTorrent
+2026-11-22T07:18:25.5499801Z Initialized empty Git repository in D:/a/CurseTorrent/CurseTorrent/.git/
+2026-11-22T07:18:25.5548516Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/jumonja-maker/CurseTorrent
+2026-11-22T07:18:25.6221064Z ##[endgroup]
+2026-11-22T07:18:25.6222917Z ##[group]Disabling automatic garbage collection
+2026-11-22T07:18:25.6229921Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-22T07:18:25.6613372Z ##[endgroup]
+2026-11-22T07:18:25.6616008Z ##[group]Setting up auth
+2026-11-22T07:18:25.6617943Z Removing SSH command configuration
+2026-11-22T07:18:25.6627134Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-22T07:18:25.7017433Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-22T07:18:27.1383302Z Removing HTTP extra header
+2026-11-22T07:18:27.1392528Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-22T07:18:27.1778777Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-22T07:18:27.7371896Z Removing includeIf entries pointing to credentials config files
+2026-11-22T07:18:27.7386992Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-22T07:18:27.7787754Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-22T07:18:28.3470546Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-22T07:18:28.3881331Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path D:\a\_temp\git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:28.4284114Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path D:\a\_temp\git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:28.4697667Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:28.5080771Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:28.5451263Z ##[endgroup]
+2026-11-22T07:18:28.5451661Z ##[group]Fetching the repository
+2026-11-22T07:18:28.5462656Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +6bed6be8755fcea0a3dc54c7156a76f537a728da:refs/remotes/origin/audit/2026-11-22
+2026-11-22T07:18:29.8032053Z From https://github.com/jumonja-maker/CurseTorrent
+2026-11-22T07:18:29.8033850Z  * [new ref]         6bed6be8755fcea0a3dc54c7156a76f537a728da -> origin/audit/2026-11-22
+2026-11-22T07:18:29.8077439Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/audit/2026-11-22
+2026-11-22T07:18:29.8479557Z   origin/audit/2026-11-22
+2026-11-22T07:18:29.8526635Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/audit/2026-11-22
+2026-11-22T07:18:29.8931672Z 6bed6be8755fcea0a3dc54c7156a76f537a728da
+2026-11-22T07:18:29.8963698Z ##[endgroup]
+2026-11-22T07:18:29.8964073Z ##[group]Determining the checkout info
+2026-11-22T07:18:29.8965148Z ##[endgroup]
+2026-11-22T07:18:29.8973763Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-11-22T07:18:29.9504576Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-11-22T07:18:29.9937196Z ##[group]Checking out the ref
+2026-11-22T07:18:29.9951532Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B audit/2026-11-22 refs/remotes/origin/audit/2026-11-22
+2026-11-22T07:18:30.0911811Z Switched to a new branch 'audit/2026-11-22'
+2026-11-22T07:18:30.0949654Z branch 'audit/2026-11-22' set up to track 'origin/audit/2026-11-22'.
+2026-11-22T07:18:30.1018417Z ##[endgroup]
+2026-11-22T07:18:30.1510697Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-11-22T07:18:30.1909267Z 6bed6be8755fcea0a3dc54c7156a76f537a728da
+2026-11-22T07:18:30.1957759Z ##[group]Removing auth
+2026-11-22T07:18:30.1958168Z Removing SSH command configuration
+2026-11-22T07:18:30.1966582Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-22T07:18:30.2359440Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-22T07:18:30.9086585Z Removing HTTP extra header
+2026-11-22T07:18:30.9158376Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-22T07:18:31.0059449Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-22T07:18:31.7693119Z Removing includeIf entries pointing to credentials config files
+2026-11-22T07:18:31.7702404Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-22T07:18:31.8078103Z includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path
+2026-11-22T07:18:31.8078948Z includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path
+2026-11-22T07:18:31.8079640Z includeif.gitdir:/github/workspace/.git.path
+2026-11-22T07:18:31.8080204Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-22T07:18:31.8130312Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path
+2026-11-22T07:18:31.8480236Z D:\a\_temp\git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:31.8527945Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path D\:\\a\\_temp\\git\-credentials\-2e420846\-f5c4\-4bc3\-8f64\-e87913d11bd1\.config
+2026-11-22T07:18:31.8923057Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path
+2026-11-22T07:18:31.9261361Z D:\a\_temp\git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:31.9306832Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-2e420846\-f5c4\-4bc3\-8f64\-e87913d11bd1\.config
+2026-11-22T07:18:31.9738362Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-22T07:18:32.0096510Z /github/runner_temp/git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:32.0141175Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-2e420846\-f5c4\-4bc3\-8f64\-e87913d11bd1\.config
+2026-11-22T07:18:32.0583762Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-22T07:18:32.1045957Z /github/runner_temp/git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config
+2026-11-22T07:18:32.1106438Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-2e420846\-f5c4\-4bc3\-8f64\-e87913d11bd1\.config
+2026-11-22T07:18:32.1519380Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-22T07:18:32.7352910Z Removing credentials config 'D:\a\_temp\git-credentials-2e420846-f5c4-4bc3-8f64-e87913d11bd1.config'
+2026-11-22T07:18:32.7365483Z ##[endgroup]
+2026-11-22T07:18:32.7842176Z ##[group]Run actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73
+2026-11-22T07:18:32.7842680Z with:
+2026-11-22T07:18:32.7842885Z   dotnet-version: 10.0.x
+2026-11-22T07:18:32.7843121Z   skip-lts-prepass: false
+2026-11-22T07:18:32.7843341Z   cache: false
+2026-11-22T07:18:32.7843521Z env:
+2026-11-22T07:18:32.7843707Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:18:32.7843941Z   DOTNET_NOLOGO: 1
+2026-11-22T07:18:32.7844139Z ##[endgroup]
+2026-11-22T07:18:33.3511844Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command & 'D:\a\_actions\actions\setup-dotnet\0f4a354dd5547a28c70b7853dbd95d5b67886e73\externals\install-dotnet.ps1' -SkipNonVersionedFiles -Runtime dotnet -Channel LTS
+2026-11-22T07:18:35.1057230Z dotnet-install: .NET Core Runtime with version '10.0.15' is already installed.
+2026-11-22T07:18:35.3027101Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command & 'D:\a\_actions\actions\setup-dotnet\0f4a354dd5547a28c70b7853dbd95d5b67886e73\externals\install-dotnet.ps1' -SkipNonVersionedFiles -Channel 10.0
+2026-11-22T07:18:36.1920629Z dotnet-install: .NET Core SDK with version '10.0.404' is already installed.
+2026-11-22T07:18:36.3028066Z ##[group]Run dotnet restore tests/CurseTorrent.Tests/CurseTorrent.Tests.csproj --locked-mode
+2026-11-22T07:18:36.3028833Z [36;1mdotnet restore tests/CurseTorrent.Tests/CurseTorrent.Tests.csproj --locked-mode[0m
+2026-11-22T07:18:36.3029364Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Restore failed' }[0m
+2026-11-22T07:18:36.3029915Z [36;1mdotnet run --project tests/CurseTorrent.Tests/CurseTorrent.Tests.csproj -c Release --no-restore[0m
+2026-11-22T07:18:36.3030502Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Baseline verification failed' }[0m
+2026-11-22T07:18:36.3606231Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:18:36.3606826Z env:
+2026-11-22T07:18:36.3607123Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:18:36.3607526Z   DOTNET_NOLOGO: 1
+2026-11-22T07:18:36.3607867Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:18:36.3608297Z ##[endgroup]
+2026-11-22T07:18:49.8784914Z   Determining projects to restore...
+2026-11-22T07:18:57.5115209Z   Restored D:\a\CurseTorrent\CurseTorrent\tests\CurseTorrent.Tests\CurseTorrent.Tests.csproj (in 5.96 sec).
+2026-11-22T07:18:59.4833033Z   Restored D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.Core\CurseTorrent.Core.csproj (in 8.57 sec).
+2026-11-22T07:19:09.9230448Z   PASS 01: Local seeder validates real deterministic payload
+2026-11-22T07:19:09.9697306Z   PASS 02: Invalid input rejected
+2026-11-22T07:19:09.9771376Z   PASS 03: Invalid input rejected
+2026-11-22T07:19:09.9800319Z   PASS 04: Invalid input rejected
+2026-11-22T07:19:09.9807051Z   PASS 05: Malformed imports do not add phantom transfers
+2026-11-22T07:19:09.9808034Z   PASS 06: Negative download limit rejected
+2026-11-22T07:19:09.9809106Z   PASS 07: Overflowing upload limit rejected
+2026-11-22T07:19:09.9814300Z   PASS 08: Invalid port rejected
+2026-11-22T07:19:10.0353272Z   PASS 09: Torrent preview reads actual metadata and file list
+2026-11-22T07:19:10.1168194Z   PASS 10: Paused import has metadata
+2026-11-22T07:19:10.1171018Z   PASS 11: Import applies selective file download before transfer
+2026-11-22T07:19:10.1189653Z   PASS 12: Duplicate info hash rejected
+2026-11-22T07:19:10.1190867Z   PASS 13: Duplicate import keeps one transfer
+2026-11-22T07:19:10.2828238Z   PASS 14: Pause interrupts an actual partial download and exposes paused state (state=Paused, progress=3.12%)
+2026-11-22T07:19:10.2829760Z   PASS 15: Selected payload size excludes skipped files
+2026-11-22T07:19:10.4179122Z   PASS 16: Session restores after the original .torrent file is deleted
+2026-11-22T07:19:10.4180242Z   PASS 17: Settings survive an application restart
+2026-11-22T07:19:10.4182385Z   PASS 18: Restart preserves paused intent
+2026-11-22T07:19:10.4187265Z   PASS 19: Restart preserves per-file priorities
+2026-11-22T07:19:11.6322774Z   PASS 20: Resumed selected payload matches source SHA-256
+2026-11-22T07:19:11.6539797Z   PASS 21: Removing a transfer retains downloaded data
+2026-11-22T07:19:11.6563831Z   PASS 22: Magnet preview validates the link
+2026-11-22T07:19:11.6684013Z   PASS 23: Cold magnet begins without cached metadata
+2026-11-22T07:19:11.7092968Z   PASS 24: Pause also stops magnet metadata acquisition
+2026-11-22T07:19:11.8547415Z   PASS 25: Magnet download alpha matches source SHA-256
+2026-11-22T07:19:11.8580817Z   PASS 26: Magnet download beta matches source SHA-256
+2026-11-22T07:19:11.9683872Z   PASS 27: Recheck verifies completed on-disk content
+2026-11-22T07:19:11.9829270Z   PASS 28: Removing immediately after requesting a recheck is safe
+2026-11-22T07:19:12.0346374Z   PASS 29: Fixture identifies cached metadata without private schema assumptions
+2026-11-22T07:19:12.0380691Z   PASS 30: One damaged cached torrent does not prevent restoring another transfer
+2026-11-22T07:19:12.0381797Z   PASS 31: Damaged imported metadata is reported to the user during recovery
+2026-11-22T07:19:12.0382710Z   PASS 32: Session restoration never deletes retained downloads
+2026-11-22T07:19:12.0736721Z   PASS 33: Removed transfers stay removed after restart
+2026-11-22T07:19:12.6501130Z   PASS 34: Application uploads real payload to a second local client
+2026-11-22T07:19:12.6617697Z   PASS 35: Pause preserves cumulative upload bytes after the engine resets its monitor
+2026-11-22T07:19:12.6776223Z   PASS 36: Cumulative upload bytes survive application restart
+2026-11-22T07:19:12.6777420Z   PASS 37: Paused seeding remains paused after restart
+2026-11-22T07:19:12.8010395Z   PASS 38: Fast-resume safely restores a completed .!mt file during manager registration
+2026-11-22T07:19:12.9597986Z   PASS 39: A torrent cannot alias another file's .!mt partial path
+2026-11-22T07:19:12.9821923Z   PASS 40: Two torrent files cannot own the same destination path
+2026-11-22T07:19:13.0935971Z   PASS 41: Magnet collision is reported after real peer-supplied metadata
+2026-11-22T07:19:13.0946983Z   PASS 42: Rejected magnet cannot truncate or overwrite another torrent's existing payload
+2026-11-22T07:19:13.3790273Z   PASS 43: Zero-byte magnet collision is rejected before entering payload mode
+2026-11-22T07:19:13.3798789Z   PASS 44: Zero-byte magnet cannot truncate an existing nonempty payload
+2026-11-22T07:19:13.4035586Z PASS: 44 checks; real loopback BitTorrent transfer, 5.3s.
+2026-11-22T07:19:13.5886237Z ##[group]Run dotnet run --project audit/network/NetworkAudit.csproj -c Release
+2026-11-22T07:19:13.5886862Z [36;1mdotnet run --project audit/network/NetworkAudit.csproj -c Release[0m
+2026-11-22T07:19:13.5887378Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Network compatibility audit failed' }[0m
+2026-11-22T07:19:13.5959265Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:19:13.5959605Z env:
+2026-11-22T07:19:13.5959784Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:19:13.5960010Z   DOTNET_NOLOGO: 1
+2026-11-22T07:19:13.5960936Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:19:13.5961179Z ##[endgroup]
+2026-11-22T07:19:17.5359586Z PASS V1Only torrent full transfer; UTF-8 filename; exact SHA-256; bytes=534328; state=Seeding
+2026-11-22T07:19:17.6567925Z PASS V1Only magnet metadata + full transfer; cold=True; exact SHA-256; files=2; elapsed=0.78s
+2026-11-22T07:19:17.8681850Z PASS V2Only torrent full transfer; UTF-8 filename; exact SHA-256; bytes=534328; state=Seeding
+2026-11-22T07:19:18.0105152Z PASS V2Only magnet metadata + full transfer; cold=True; exact SHA-256; files=2; elapsed=0.34s
+2026-11-22T07:19:18.1836550Z PASS V1V2Hybrid torrent full transfer; UTF-8 filename; exact SHA-256; bytes=534328; state=Seeding
+2026-11-22T07:19:18.2808251Z PASS V1V2Hybrid magnet metadata + full transfer; cold=True; exact SHA-256; files=2; elapsed=0.26s
+2026-11-22T07:19:18.3192467Z NETWORK_AUDIT_RESULT failures=0
+2026-11-22T07:19:18.5119936Z ##[group]Run dotnet build audit/core/CoreAudit.csproj -c Release
+2026-11-22T07:19:18.5120830Z [36;1mdotnet build audit/core/CoreAudit.csproj -c Release[0m
+2026-11-22T07:19:18.5121966Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Core audit build failed' }[0m
+2026-11-22T07:19:18.5122594Z [36;1m$failures = @()[0m
+2026-11-22T07:19:18.5123378Z [36;1mforeach ($mode in @('changed-payload', 'session', 'save-failure', 'transitions', 'metadata-stop')) {[0m
+2026-11-22T07:19:18.5124550Z [36;1m  dotnet run --project audit/core/CoreAudit.csproj -c Release --no-build -- $mode[0m
+2026-11-22T07:19:18.5125414Z [36;1m  if ($LASTEXITCODE -ne 0) { $failures += $mode }[0m
+2026-11-22T07:19:18.5125920Z [36;1m}[0m
+2026-11-22T07:19:18.5126506Z [36;1mif ($failures.Count -gt 0) { throw ('Core audit failures: ' + ($failures -join ', ')) }[0m
+2026-11-22T07:19:18.5217161Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:19:18.5217512Z env:
+2026-11-22T07:19:18.5217726Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:19:18.5217967Z   DOTNET_NOLOGO: 1
+2026-11-22T07:19:18.5218180Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:19:18.5218423Z ##[endgroup]
+2026-11-22T07:19:19.6390445Z   Determining projects to restore...
+2026-11-22T07:19:20.3924207Z   Restored D:\a\CurseTorrent\CurseTorrent\audit\core\CoreAudit.csproj (in 393 ms).
+2026-11-22T07:19:20.3966962Z   1 of 2 projects are up-to-date for restore.
+2026-11-22T07:19:20.8600218Z   CurseTorrent.Core -> D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.Core\bin\Release\net10.0\CurseTorrent.Core.dll
+2026-11-22T07:19:21.2465336Z   CoreAudit -> D:\a\CurseTorrent\CurseTorrent\audit\core\bin\Release\net10.0\CurseTorrent.Tests.dll
+2026-11-22T07:19:21.2581084Z 
+2026-11-22T07:19:21.2588616Z Build succeeded.
+2026-11-22T07:19:21.2595472Z     0 Warning(s)
+2026-11-22T07:19:21.2595796Z     0 Error(s)
+2026-11-22T07:19:21.2597404Z 
+2026-11-22T07:19:21.2597729Z Time Elapsed 00:00:02.12
+2026-11-22T07:19:22.2464635Z AUDIT mode=changed-payload root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-audit-changed-payload-6c7d4f9414384006a8359182073c703f
+2026-11-22T07:19:22.6630109Z original_verified={"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-changed-payload-6c7d4f9414384006a8359182073c703f\\seed","State":6,"Progress":100,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":131072,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}
+2026-11-22T07:19:22.7247230Z after_restart={"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-changed-payload-6c7d4f9414384006a8359182073c703f\\seed","State":6,"Progress":100,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":131072,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}
+2026-11-22T07:19:22.7981286Z after_resume={"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-changed-payload-6c7d4f9414384006a8359182073c703f\\seed","State":5,"Progress":100,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":131072,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}
+2026-11-22T07:19:22.7985567Z actual_file_bytes=1
+2026-11-22T07:19:22.8634644Z after_manual_recheck={"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-changed-payload-6c7d4f9414384006a8359182073c703f\\seed","State":6,"Progress":0,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":0,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}
+2026-11-22T07:19:23.8482116Z AUDIT mode=session root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-audit-session-3bfacec00bdf48bcac1de7daa04cedf7
+2026-11-22T07:19:24.2030982Z CASE null-list INIT_FAILED InvalidDataException: Недопустимый список загрузок в сессии.
+2026-11-22T07:19:24.2038885Z CASE null-list original_preserved=True damaged_copies=0 backup_still_valid=True
+2026-11-22T07:19:24.2344984Z CASE null-entry count=0 warnings=["\u041F\u0440\u043E\u043F\u0443\u0449\u0435\u043D\u0430 \u043F\u043E\u0432\u0440\u0435\u0436\u0434\u0451\u043D\u043D\u0430\u044F \u0438\u043B\u0438 \u043F\u043E\u0432\u0442\u043E\u0440\u044F\u044E\u0449\u0430\u044F\u0441\u044F \u0437\u0430\u043F\u0438\u0441\u044C \u0441\u0435\u0441\u0441\u0438\u0438."] snapshots=[]
+2026-11-22T07:19:24.2478683Z CASE null-entry original_preserved=False damaged_copies=0 backup_still_valid=False
+2026-11-22T07:19:24.2581507Z CASE missing-fields count=1 warnings=[": \u0423\u043A\u0430\u0436\u0438\u0442\u0435 .torrent-\u0444\u0430\u0439\u043B \u0438\u043B\u0438 magnet-\u0441\u0441\u044B\u043B\u043A\u0443."] snapshots=[{"Id":"abcdef","Name":"","SaveDirectory":"","State":8,"Progress":0,"SizeBytes":0,"SelectedSizeBytes":0,"DownloadedBytes":0,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":"\u0423\u043A\u0430\u0436\u0438\u0442\u0435 .torrent-\u0444\u0430\u0439\u043B \u0438\u043B\u0438 magnet-\u0441\u0441\u044B\u043B\u043A\u0443.","HasMetadata":false,"Files":[]}]
+2026-11-22T07:19:24.2701433Z CASE missing-fields original_preserved=False damaged_copies=0 backup_still_valid=False
+2026-11-22T07:19:24.2934223Z CASE wrong-priority-type count=1 warnings=["session.json \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D \u0438\u0437 \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u043E\u0439 \u043A\u043E\u043F\u0438\u0438. \u041F\u043E\u0432\u0440\u0435\u0436\u0434\u0451\u043D\u043D\u044B\u0439 \u0444\u0430\u0439\u043B \u0441\u043E\u0445\u0440\u0430\u043D\u0451\u043D \u0440\u044F\u0434\u043E\u043C."] snapshots=[{"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-session-3bfacec00bdf48bcac1de7daa04cedf7\\seed","State":6,"Progress":0,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":0,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}]
+2026-11-22T07:19:24.3053897Z CASE wrong-priority-type original_preserved=False damaged_copies=1 backup_still_valid=False
+2026-11-22T07:19:24.3114024Z CASE negative-upload count=1 warnings=[] snapshots=[{"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-session-3bfacec00bdf48bcac1de7daa04cedf7\\seed","State":6,"Progress":0,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":0,"UploadedBytes":-12345,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}]
+2026-11-22T07:19:24.3219971Z CASE negative-upload original_preserved=True damaged_copies=0 backup_still_valid=False
+2026-11-22T07:19:24.3254380Z CASE unknown-version INIT_FAILED InvalidDataException: Эта версия CurseTorrent не поддерживает формат сохранённой сессии. Файлы оставлены без изменений.
+2026-11-22T07:19:24.3257382Z CASE unknown-version original_preserved=True damaged_copies=0 backup_still_valid=True
+2026-11-22T07:19:24.3340433Z CASE missing-version count=1 warnings=[] snapshots=[{"Id":"10DDA11BA9BF17EB534F5E69EF91A83314C9A3C7","Name":"sample.bin","SaveDirectory":"C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cursetorrent-audit-session-3bfacec00bdf48bcac1de7daa04cedf7\\seed","State":6,"Progress":0,"SizeBytes":131072,"SelectedSizeBytes":131072,"DownloadedBytes":0,"UploadedBytes":0,"DownloadBytesPerSecond":0,"UploadBytesPerSecond":0,"ConnectedPeers":0,"Seeds":0,"EstimatedRemaining":null,"ErrorMessage":null,"HasMetadata":true,"Files":[]}]
+2026-11-22T07:19:24.3442955Z CASE missing-version original_preserved=False damaged_copies=0 backup_still_valid=False
+2026-11-22T07:19:24.3481794Z CASE empty-document count=0 warnings=[] snapshots=[]
+2026-11-22T07:19:24.3622329Z CASE empty-document original_preserved=False damaged_copies=0 backup_still_valid=False
+2026-11-22T07:19:25.3595247Z AUDIT mode=save-failure root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-audit-save-failure-0bf84cfd71c74728b76bfdcc504ab2cb
+2026-11-22T07:19:25.6496993Z EXPECTED IO FAILURE settings.json blocked by directory: Cannot create a file when that file already exists.
+2026-11-22T07:19:25.6498158Z CHECK PASS: Settings snapshot rolls back failed update
+2026-11-22T07:19:25.6498839Z CHECK PASS: engine rate rolls back failed update
+2026-11-22T07:19:25.7610216Z EXPECTED IO FAILURE remove with unwritable session target: Cannot create a file when that file already exists.
+2026-11-22T07:19:25.7636780Z CHECK PASS: failed remove leaves paused visible task
+2026-11-22T07:19:25.8020023Z EXPECTED IO FAILURE add with unwritable session target: Cannot create a file when that file already exists.
+2026-11-22T07:19:25.8021051Z CHECK PASS: failed add rolls back public task
+2026-11-22T07:19:25.8187428Z CHECK PASS: retry add after rollback succeeds without phantom manager or reserved paths
+2026-11-22T07:19:25.8194394Z CHECK PASS: all failed atomic-write temporary files cleaned
+2026-11-22T07:19:26.7900897Z AUDIT mode=transitions root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-audit-transitions-326de96e67c74d649a02220d2da6394c
+2026-11-22T07:19:27.1635255Z CHECK PASS: recheck/resume/pause iteration 0
+2026-11-22T07:19:27.2458847Z CHECK PASS: recheck/resume/pause iteration 1
+2026-11-22T07:19:27.2866710Z CHECK PASS: recheck/resume/pause iteration 2
+2026-11-22T07:19:27.3184983Z CHECK PASS: recheck/resume/pause iteration 3
+2026-11-22T07:19:27.3554493Z CHECK PASS: recheck/resume/pause iteration 4
+2026-11-22T07:19:27.3907743Z CHECK PASS: recheck/resume/pause iteration 5
+2026-11-22T07:19:27.4278390Z CHECK PASS: recheck/resume/pause iteration 6
+2026-11-22T07:19:27.4643002Z CHECK PASS: recheck/resume/pause iteration 7
+2026-11-22T07:19:27.5013635Z CHECK PASS: recheck/resume/pause iteration 8
+2026-11-22T07:19:27.5342106Z CHECK PASS: recheck/resume/pause iteration 9
+2026-11-22T07:19:27.5679967Z CHECK PASS: recheck/resume/pause iteration 10
+2026-11-22T07:19:27.6050661Z CHECK PASS: recheck/resume/pause iteration 11
+2026-11-22T07:19:27.6440857Z CHECK PASS: recheck/resume/pause iteration 12
+2026-11-22T07:19:27.6767169Z CHECK PASS: recheck/resume/pause iteration 13
+2026-11-22T07:19:27.7082829Z CHECK PASS: recheck/resume/pause iteration 14
+2026-11-22T07:19:27.7581432Z CHECK PASS: recheck/resume/pause iteration 15
+2026-11-22T07:19:27.7908794Z CHECK PASS: recheck/resume/pause iteration 16
+2026-11-22T07:19:27.8243643Z CHECK PASS: recheck/resume/pause iteration 17
+2026-11-22T07:19:27.8582202Z CHECK PASS: recheck/resume/pause iteration 18
+2026-11-22T07:19:27.8938160Z CHECK PASS: recheck/resume/pause iteration 19
+2026-11-22T07:19:27.9185796Z CHECK PASS: immediate recheck/remove iteration 0
+2026-11-22T07:19:27.9474070Z CHECK PASS: immediate recheck/remove iteration 1
+2026-11-22T07:19:27.9743294Z CHECK PASS: immediate recheck/remove iteration 2
+2026-11-22T07:19:28.0015805Z CHECK PASS: immediate recheck/remove iteration 3
+2026-11-22T07:19:28.0262697Z CHECK PASS: immediate recheck/remove iteration 4
+2026-11-22T07:19:28.0584757Z CHECK PASS: immediate recheck/remove iteration 5
+2026-11-22T07:19:28.0887363Z CHECK PASS: immediate recheck/remove iteration 6
+2026-11-22T07:19:28.1149418Z CHECK PASS: immediate recheck/remove iteration 7
+2026-11-22T07:19:28.1419283Z CHECK PASS: immediate recheck/remove iteration 8
+2026-11-22T07:19:28.1669566Z CHECK PASS: immediate recheck/remove iteration 9
+2026-11-22T07:19:28.2203338Z CHECK PASS: service remains healthy after control transitions
+2026-11-22T07:19:29.1552385Z AUDIT mode=metadata-stop root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-audit-metadata-stop-3afb4dc050b7486aa240ef46656fa68a
+2026-11-22T07:19:29.3763133Z tracker_request_received=true
+2026-11-22T07:19:32.4878756Z after_3_seconds pause_completed=False unrelated_settings_completed=False
+2026-11-22T07:20:29.4120451Z pause_elapsed_seconds=60.036
+2026-11-22T07:20:29.4377466Z settings_applied_connections=40
+2026-11-22T07:20:29.6126408Z ##[group]Run dotnet build audit/security/repro/SecurityRepro.csproj -c Release
+2026-11-22T07:20:29.6127481Z [36;1mdotnet build audit/security/repro/SecurityRepro.csproj -c Release[0m
+2026-11-22T07:20:29.6128381Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'File retention audit build failed' }[0m
+2026-11-22T07:20:29.6129147Z [36;1mforeach ($mode in @('existing', 'skipzero')) {[0m
+2026-11-22T07:20:29.6130115Z [36;1m  dotnet run --project audit/security/repro/SecurityRepro.csproj -c Release --no-build -- $mode[0m
+2026-11-22T07:20:29.6131269Z [36;1m  if ($LASTEXITCODE -ne 0) { throw "File retention audit could not complete: $mode" }[0m
+2026-11-22T07:20:29.6131957Z [36;1m}[0m
+2026-11-22T07:20:29.6228429Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:20:29.6228778Z env:
+2026-11-22T07:20:29.6228962Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:20:29.6229190Z   DOTNET_NOLOGO: 1
+2026-11-22T07:20:29.6229437Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:20:29.6229693Z ##[endgroup]
+2026-11-22T07:20:30.6353276Z   Determining projects to restore...
+2026-11-22T07:20:31.3401231Z   Restored D:\a\CurseTorrent\CurseTorrent\audit\security\repro\SecurityRepro.csproj (in 364 ms).
+2026-11-22T07:20:31.3443806Z   1 of 2 projects are up-to-date for restore.
+2026-11-22T07:20:31.7758798Z   CurseTorrent.Core -> D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.Core\bin\Release\net10.0\CurseTorrent.Core.dll
+2026-11-22T07:20:32.1662507Z   SecurityRepro -> D:\a\CurseTorrent\CurseTorrent\audit\security\repro\bin\Release\net10.0\SecurityRepro.dll
+2026-11-22T07:20:32.1771128Z 
+2026-11-22T07:20:32.1780243Z Build succeeded.
+2026-11-22T07:20:32.1781500Z     0 Warning(s)
+2026-11-22T07:20:32.1781818Z     0 Error(s)
+2026-11-22T07:20:32.1783343Z 
+2026-11-22T07:20:32.1783645Z Time Elapsed 00:00:02.01
+2026-11-22T07:20:33.1802230Z MODE=existing root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-dcb2f304cc2548fc856a9211fa766c8d
+2026-11-22T07:20:33.3311610Z BEFORE path=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-dcb2f304cc2548fc856a9211fa766c8d\downloads\notes.txt; length=131072; sha256=55A3534E3D7E36F887D2784617C97AB7639FA7675283A25086CFD38540D850A5
+2026-11-22T07:20:33.4881299Z Added paused. Original length=131072
+2026-11-22T07:20:35.0040098Z State=Paused; error=; files=notes.txt:Normal
+2026-11-22T07:20:35.0438878Z AFTER path=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-dcb2f304cc2548fc856a9211fa766c8d\downloads\notes.txt.!mt; length=32768; sha256=D6C3D486C31821DF5BEF94FB5E8677C2154892851D6ADF07CD8E8003BD634109
+2026-11-22T07:20:35.0446773Z Remaining files=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-dcb2f304cc2548fc856a9211fa766c8d\downloads\notes.txt.!mt
+2026-11-22T07:20:35.9485435Z MODE=skipzero root=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-1873eb392d124c71bd789dc65f9fbb5a
+2026-11-22T07:20:36.1036681Z BEFORE path=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-1873eb392d124c71bd789dc65f9fbb5a\downloads\Example\notes.txt; length=131072; sha256=55A3534E3D7E36F887D2784617C97AB7639FA7675283A25086CFD38540D850A5
+2026-11-22T07:20:36.2620556Z Added paused. Original length=131072
+2026-11-22T07:20:37.8140237Z State=Downloading; error=; files=notes.txt:Skip|payload.bin:Normal
+2026-11-22T07:20:37.8712571Z AFTER path=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-1873eb392d124c71bd789dc65f9fbb5a\downloads\Example\notes.txt; length=0; sha256=E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+2026-11-22T07:20:37.8717791Z Remaining files=C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-1873eb392d124c71bd789dc65f9fbb5a\downloads\Example\notes.txt|C:\Users\runneradmin\AppData\Local\Temp\cursetorrent-security-1873eb392d124c71bd789dc65f9fbb5a\downloads\Example\payload.bin.!mt
+2026-11-22T07:20:38.0327802Z ##[group]Run powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File audit/security/InstallerAudit.ps1 -RepositoryRoot $PWD.Path
+2026-11-22T07:20:38.0328910Z [36;1mpowershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File audit/security/InstallerAudit.ps1 -RepositoryRoot $PWD.Path[0m
+2026-11-22T07:20:38.0329603Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'Installer audit failed' }[0m
+2026-11-22T07:20:38.0399855Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:20:38.0400207Z env:
+2026-11-22T07:20:38.0400402Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:20:38.0400634Z   DOTNET_NOLOGO: 1
+2026-11-22T07:20:38.0400841Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:20:38.0401089Z ##[endgroup]
+2026-11-22T07:20:41.6942058Z Installed: C:\Users\runneradmin\AppData\Local\Temp\CurseTorrent-install-audit-db9dbdc7fb01440c9d951e39844ad69f\ordinary-target\CurseTorrent.exe
+2026-11-22T07:20:41.6951125Z Downloads and application settings were preserved.
+2026-11-22T07:20:41.7760687Z Installed: C:\Users\runneradmin\AppData\Local\Temp\CurseTorrent-install-audit-db9dbdc7fb01440c9d951e39844ad69f\ordinary-target\CurseTorrent.exe
+2026-11-22T07:20:41.7768843Z Downloads and application settings were preserved.
+2026-11-22T07:20:41.8365756Z PASS: Ordinary update replaced the program fixture
+2026-11-22T07:20:41.8379724Z PASS: Ordinary update preserved the unknown file
+2026-11-22T07:20:41.9602410Z CurseTorrent was uninstalled. Downloads and saved application data were preserved.
+2026-11-22T07:20:41.9615126Z PASS: Uninstall preserved the unknown file
+2026-11-22T07:20:41.9628301Z PASS: Uninstall removed the program fixture
+2026-11-22T07:20:42.0896921Z PASS: An ordinary file-lock error interrupted initial installation
+2026-11-22T07:20:42.1087800Z {
+2026-11-22T07:20:42.1088410Z     "Scenario":  "Interrupted initial install and normal retry",
+2026-11-22T07:20:42.1090577Z     "InitialError":  "The process cannot access the file \u0027C:\\Users\\runneradmin\\AppData\\Local\\Temp\\CurseTorrent-install-audit-db9dbdc7fb01440c9d951e39844ad69f\\locked-package\\z-locked.bin\u0027 because it is being used by another process.",
+2026-11-22T07:20:42.1092426Z     "PartialFiles":  [
+2026-11-22T07:20:42.1092856Z                          "CurseTorrent.exe",
+2026-11-22T07:20:42.1093378Z                          "install.ps1",
+2026-11-22T07:20:42.1093845Z                          "uninstall.ps1"
+2026-11-22T07:20:42.1094277Z                      ],
+2026-11-22T07:20:42.1094667Z     "HasManifestAfterFailure":  false,
+2026-11-22T07:20:42.1095884Z     "RetryError":  "The folder is not empty and was not created by this installer. Choose another folder."
+2026-11-22T07:20:42.1096653Z }
+2026-11-22T07:20:42.1119320Z PASS: Observed recovery defect: a partial initial installation blocks a normal retry
+2026-11-22T07:20:42.2735355Z ##[group]Run $ErrorActionPreference = 'Stop'
+2026-11-22T07:20:42.2735775Z [36;1m$ErrorActionPreference = 'Stop'[0m
+2026-11-22T07:20:42.2736202Z [36;1mdotnet build audit/ui/WindowsUiAudit/WindowsUiAudit.csproj -c Release -m:1[0m
+2026-11-22T07:20:42.2736721Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'WPF audit build failed' }[0m
+2026-11-22T07:20:42.2737185Z [36;1m$output = Join-Path $env:RUNNER_TEMP 'CurseTorrent-ui-audit'[0m
+2026-11-22T07:20:42.2737631Z [36;1mNew-Item -ItemType Directory -Path $output -Force | Out-Null[0m
+2026-11-22T07:20:42.2738186Z [36;1m$app = Join-Path $PWD 'audit/ui/WindowsUiAudit/bin/Release/net10.0-windows/WindowsUiAudit.exe'[0m
+2026-11-22T07:20:42.2739212Z [36;1m$process = Start-Process -FilePath $app -ArgumentList ('"' + $output + '"') -PassThru -RedirectStandardOutput (Join-Path $output 'stdout.txt') -RedirectStandardError (Join-Path $output 'stderr.txt')[0m
+2026-11-22T07:20:42.2740218Z [36;1m$finished = $process.WaitForExit(120000)[0m
+2026-11-22T07:20:42.2740539Z [36;1mif (-not $finished) { $process.Kill() }[0m
+2026-11-22T07:20:42.2740828Z [36;1m$process.WaitForExit()[0m
+2026-11-22T07:20:42.2741152Z [36;1mGet-Content (Join-Path $output 'stdout.txt') | Write-Host[0m
+2026-11-22T07:20:42.2741560Z [36;1mGet-Content (Join-Path $output 'stderr.txt') | Write-Host[0m
+2026-11-22T07:20:42.2741966Z [36;1mforeach ($file in Get-ChildItem $output -Filter '*.png') {[0m
+2026-11-22T07:20:42.2742353Z [36;1m  Write-Host ('AUDIT_IMAGE_BEGIN ' + $file.Name)[0m
+2026-11-22T07:20:42.2742786Z [36;1m  $encoded = [Convert]::ToBase64String([IO.File]::ReadAllBytes($file.FullName))[0m
+2026-11-22T07:20:42.2744158Z [36;1m  Write-Host ('AUDIT_IMAGE_END ' + $file.Name)[0m
+2026-11-22T07:20:42.2744434Z [36;1m}[0m
+2026-11-22T07:20:42.2745071Z [36;1mif (-not $finished) { throw 'WPF audit timed out' }[0m
+2026-11-22T07:20:42.2745788Z [36;1mif ($process.ExitCode -ne 0) { throw "WPF audit process failed: $($process.ExitCode)" }[0m
+2026-11-22T07:20:42.2813976Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:20:42.2814322Z env:
+2026-11-22T07:20:42.2814510Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:20:42.2814742Z   DOTNET_NOLOGO: 1
+2026-11-22T07:20:42.2814945Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:20:42.2815195Z ##[endgroup]
+2026-11-22T07:20:43.4793567Z   Determining projects to restore...
+2026-11-22T07:20:44.2856722Z   Restored D:\a\CurseTorrent\CurseTorrent\audit\ui\WindowsUiAudit\WindowsUiAudit.csproj (in 364 ms).
+2026-11-22T07:20:44.2889666Z   Restored D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.App\CurseTorrent.App.csproj (in 364 ms).
+2026-11-22T07:20:44.2933759Z   1 of 3 projects are up-to-date for restore.
+2026-11-22T07:20:44.7968214Z   CurseTorrent.Core -> D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.Core\bin\Release\net10.0\CurseTorrent.Core.dll
+2026-11-22T07:20:46.3968913Z   CurseTorrent.App -> D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.App\bin\Release\net10.0-windows\CurseTorrent.dll
+2026-11-22T07:20:46.6665968Z   WindowsUiAudit -> D:\a\CurseTorrent\CurseTorrent\audit\ui\WindowsUiAudit\bin\Release\net10.0-windows\WindowsUiAudit.dll
+2026-11-22T07:20:46.6769681Z 
+2026-11-22T07:20:46.6776874Z Build succeeded.
+2026-11-22T07:20:46.6778233Z     0 Warning(s)
+2026-11-22T07:20:46.6778587Z     0 Error(s)
+2026-11-22T07:20:46.6780182Z 
+2026-11-22T07:20:46.6780457Z Time Elapsed 00:00:03.84
+2026-11-22T07:20:54.1607117Z AUDIT_JSON {"test":"environment","data":{"framework":".NET 10.0.15","os":"Microsoft Windows NT 10.0.26100.0","dpi":{"DpiScaleX":1,"DpiScaleY":1,"PixelsPerDip":1,"PixelsPerInchX":96,"PixelsPerInchY":96},"workArea":"0;0;1024;720","main":{"width":1044,"height":788,"left":-113,"top":-40},"mainMinimum":{"width":940,"height":620}}}
+2026-11-22T07:20:54.1615747Z AUDIT_SCREENSHOT 01-main-files.png
+2026-11-22T07:20:54.1620889Z AUDIT_JSON {"test":"file-size-sort-ascending","data":{"direction":"Ascending","order":[{"Path":"10-bytes.bin","Size":"10 \u0411"},{"Path":"100-gib.bin","Size":"100 \u0413\u0438\u0411"},{"Path":"2-kib.bin","Size":"2,0 \u041A\u0438\u0411"},{"Path":"900-mib.bin","Size":"900 \u041C\u0438\u0411"}],"expectedAscending":["10-bytes.bin","2-kib.bin","900-mib.bin","100-gib.bin"],"isNumericAscending":false}}
+2026-11-22T07:20:54.1626942Z AUDIT_JSON {"test":"file-progress-sort-ascending","data":{"direction":"Ascending","order":[{"Path":"900-mib.bin","ProgressText":"100,0%"},{"Path":"100-gib.bin","ProgressText":"12,0%"},{"Path":"10-bytes.bin","ProgressText":"2,0%"},{"Path":"2-kib.bin","ProgressText":"20,0%"}],"expectedAscending":["10-bytes.bin","100-gib.bin","2-kib.bin","900-mib.bin"],"isNumericAscending":false}}
+2026-11-22T07:20:54.1630839Z AUDIT_SCREENSHOT 02-main-sorted-progress.png
+2026-11-22T07:20:54.1636820Z AUDIT_JSON {"test":"timer-refresh-dropdown","data":{"mainSelectionPreserved":true,"fileSelectionPreserved":true,"sameComboAttached":true,"IsDropDownOpen":true,"IsKeyboardFocusWithin":true,"focusedElement":"ComboBoxItem"}}
+2026-11-22T07:20:54.1642502Z AUDIT_JSON {"test":"priority-binding","data":{"calls":1,"last":{"id":"active","path":"900-mib.bin","priority":"High"},"expectedPath":"900-mib.bin","expectedPriority":"High"}}
+2026-11-22T07:20:54.1646303Z AUDIT_SCREENSHOT 03-main-details.png
+2026-11-22T07:20:54.1651482Z AUDIT_SCREENSHOT 04-main-minimum.png
+2026-11-22T07:20:54.1656945Z AUDIT_JSON {"test":"horizontal-scroll-page-click","data":{"available":false,"ScrollableWidth":0}}
+2026-11-22T07:20:54.1665626Z AUDIT_JSON {"test":"minimum-main-layout","data":{"main":{"width":940,"height":620,"left":-113,"top":-40},"torrentGrid":{"IsEmpty":false,"Location":{"X":224,"Y":173},"Size":{"IsEmpty":false,"Width":672,"Height":129},"X":224,"Y":173,"Width":672,"Height":129,"Left":224,"Top":173,"Right":896,"Bottom":302,"TopLeft":{"X":224,"Y":173},"TopRight":{"X":896,"Y":173},"BottomLeft":{"X":224,"Y":302},"BottomRight":{"X":896,"Y":302}},"fileGrid":{"IsEmpty":false,"Location":{"X":229,"Y":356},"Size":{"IsEmpty":false,"Width":662,"Height":144},"X":229,"Y":356,"Width":662,"Height":144,"Left":229,"Top":356,"Right":891,"Bottom":500,"TopLeft":{"X":229,"Y":356},"TopRight":{"X":891,"Y":356},"BottomLeft":{"X":229,"Y":500},"BottomRight":{"X":891,"Y":500}},"toolbar":{"IsEmpty":false,"Location":{"X":222,"Y":115},"Size":{"IsEmpty":false,"Width":676,"Height":40},"X":222,"Y":115,"Width":676,"Height":40,"Left":222,"Top":115,"Right":898,"Bottom":155,"TopLeft":{"X":222,"Y":115},"TopRight":{"X":898,"Y":115},"BottomLeft":{"X":222,"Y":155},"BottomRight":{"X":898,"Y":155}},"notes":"Native DPI is reported above. This is the declared minimum size, not a simulated DPI change."}}
+2026-11-22T07:20:54.1669793Z AUDIT_SCREENSHOT 05-settings.png
+2026-11-22T07:20:54.1673862Z AUDIT_JSON {"test":"settings-window","data":{"actual":{"width":690,"height":760,"left":64,"top":0},"minimum":{"width":640,"height":630}}}
+2026-11-22T07:20:54.1679625Z AUDIT_SCREENSHOT 06-add-torrent.png
+2026-11-22T07:20:54.1684727Z AUDIT_SCREENSHOT 07-magnet.png
+2026-11-22T07:20:54.1689398Z AUDIT_SCREENSHOT 08-add-magnet.png
+2026-11-22T07:20:54.1697831Z AUDIT_JSON {"test":"long-magnet-name-layout","data":{"magnetCharacters":11161,"displayNameCharacters":1999,"acceptedByRealCoreInspector":true,"window":{"width":760,"height":640,"left":29,"top":34},"addButton":"598;747;120;35","addButtonFullyInWindow":false,"title":"26;67;692;428"}}
+2026-11-22T07:20:54.1702381Z AUDIT_SCREENSHOT 09-add-long-magnet.png
+2026-11-22T07:20:54.1710048Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":100,"elapsedMilliseconds":57.8507,"includesInitialRows":true}}
+2026-11-22T07:20:54.1719407Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":100,"elapsedMilliseconds":47.2851,"includesInitialRows":false}}
+2026-11-22T07:20:54.1728680Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":1000,"elapsedMilliseconds":85.3419,"includesInitialRows":true}}
+2026-11-22T07:20:54.1738195Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":1000,"elapsedMilliseconds":48.3845,"includesInitialRows":false}}
+2026-11-22T07:20:54.1744305Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":10000,"elapsedMilliseconds":1836.8032,"includesInitialRows":true}}
+2026-11-22T07:20:54.1750847Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":10000,"elapsedMilliseconds":76.4696,"includesInitialRows":false}}
+2026-11-22T07:20:54.1756227Z AUDIT_JSON {"test":"binding-errors","data":{"count":0,"messages":[]}}
+2026-11-22T07:20:54.1868298Z AUDIT_IMAGE_BEGIN 01-main-files.png
+2026-11-22T07:20:54.3306049Z AUDIT_IMAGE_END 01-main-files.png
+2026-11-22T07:20:54.3306344Z AUDIT_IMAGE_BEGIN 02-main-sorted-progress.png
+2026-11-22T07:20:54.4231849Z AUDIT_IMAGE_END 02-main-sorted-progress.png
+2026-11-22T07:20:54.4232169Z AUDIT_IMAGE_BEGIN 03-main-details.png
+2026-11-22T07:20:54.5051120Z AUDIT_IMAGE_END 03-main-details.png
+2026-11-22T07:20:54.5051403Z AUDIT_IMAGE_BEGIN 04-main-minimum.png
+2026-11-22T07:20:54.5809590Z AUDIT_IMAGE_END 04-main-minimum.png
+2026-11-22T07:20:54.5809862Z AUDIT_IMAGE_BEGIN 05-settings.png
+2026-11-22T07:20:54.6314404Z AUDIT_IMAGE_END 05-settings.png
+2026-11-22T07:20:54.6314678Z AUDIT_IMAGE_BEGIN 06-add-torrent.png
+2026-11-22T07:20:54.6631318Z AUDIT_IMAGE_END 06-add-torrent.png
+2026-11-22T07:20:54.6631587Z AUDIT_IMAGE_BEGIN 07-magnet.png
+2026-11-22T07:20:54.6757868Z AUDIT_IMAGE_END 07-magnet.png
+2026-11-22T07:20:54.6758130Z AUDIT_IMAGE_BEGIN 08-add-magnet.png
+2026-11-22T07:20:54.7164024Z AUDIT_IMAGE_END 08-add-magnet.png
+2026-11-22T07:20:54.7164317Z AUDIT_IMAGE_BEGIN 09-add-long-magnet.png
+2026-11-22T07:20:54.8314453Z AUDIT_IMAGE_END 09-add-long-magnet.png
+2026-11-22T07:20:54.8530435Z Post job cleanup.
+2026-11-22T07:20:55.0339333Z Post job cleanup.
+2026-11-22T07:20:55.2626457Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-22T07:20:55.3011859Z git version 2.56.1.windows.1
+2026-11-22T07:20:55.3084623Z Temporarily overriding HOME='D:\a\_temp\37c60555-4267-47ed-a4c2-a89fa95e1884' before making global git config changes
+2026-11-22T07:20:55.3085724Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-22T07:20:55.3096397Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\CurseTorrent\CurseTorrent
+2026-11-22T07:20:55.3501186Z Removing SSH command configuration
+2026-11-22T07:20:55.3512211Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-22T07:20:55.3915153Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-22T07:20:55.9547273Z Removing HTTP extra header
+2026-11-22T07:20:55.9557715Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-22T07:20:55.9972005Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-22T07:20:56.5646768Z Removing includeIf entries pointing to credentials config files
+2026-11-22T07:20:56.5658055Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-22T07:20:56.6040394Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-22T07:20:57.1929861Z Cleaning up orphan processes
+2026-11-22T07:20:57.2182315Z Terminate orphan process: pid (4920) (VBCSCompiler)
+2026-11-22T07:20:57.2239890Z Terminate orphan process: pid (6236) (conhost)

@@ -1,0 +1,5 @@
+AUDIT mode=metadata-stop root=/tmp/cursetorrent-audit-metadata-stop-a0ab8ae149b644dca4e8deccbc3c3be1
+tracker_request_received=true
+after_3_seconds pause_completed=False unrelated_settings_completed=False
+pause_elapsed_seconds=60.035
+settings_applied_connections=40

@@ -1,0 +1,257 @@
+﻿2026-11-22T07:28:01.2091076Z Current runner version: '2.338.2'
+2026-11-22T07:28:01.2117457Z ##[group]Runner Image Provisioner
+2026-11-22T07:28:01.2118274Z Hosted Compute Agent
+2026-11-22T07:28:01.2118815Z Version: 20261111.635
+2026-11-22T07:28:01.2119366Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-22T07:28:01.2119997Z Build Date: 2026-11-11T01:49:01Z
+2026-11-22T07:28:01.2120625Z Worker ID: {592bc1c6-6d55-470a-9961-23fd8c7fdbdc}
+2026-11-22T07:28:01.2121247Z Region: westus3
+2026-11-22T07:28:01.2121705Z Cloud: Azure
+2026-11-22T07:28:01.2122175Z ##[endgroup]
+2026-11-22T07:28:01.2123401Z ##[group]Operating System
+2026-11-22T07:28:01.2124022Z Microsoft Windows Server 2025
+2026-11-22T07:28:01.2124553Z 10.0.26100
+2026-11-22T07:28:01.2124992Z Datacenter
+2026-11-22T07:28:01.2125483Z ##[endgroup]
+2026-11-22T07:28:01.2125954Z ##[group]Runner Image
+2026-11-22T07:28:01.2126473Z Image: windows-2025-vs2026
+2026-11-22T07:28:01.2127003Z Version: 20261116.315.1
+2026-11-22T07:28:01.2128698Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261116.315/images/windows/Windows2025-VS2026-Readme.md
+2026-11-22T07:28:01.2130279Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261116.315
+2026-11-22T07:28:01.2131154Z ##[endgroup]
+2026-11-22T07:28:01.2132166Z ##[group]GITHUB_TOKEN Permissions
+2026-11-22T07:28:01.2134302Z Contents: read
+2026-11-22T07:28:01.2134810Z Metadata: read
+2026-11-22T07:28:01.2135265Z ##[endgroup]
+2026-11-22T07:28:01.2137347Z Secret source: Actions
+2026-11-22T07:28:01.2138098Z Cache mode: write
+2026-11-22T07:28:01.2138765Z Prepare workflow directory
+2026-11-22T07:28:01.2710521Z Prepare all required actions
+2026-11-22T07:28:01.2759969Z Getting action download info
+2026-11-22T07:28:01.5799654Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-22T07:28:01.7101057Z Download action repository 'actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73' (SHA:0f4a354dd5547a28c70b7853dbd95d5b67886e73)
+2026-11-22T07:28:02.4495310Z Complete job name: windows-audit
+2026-11-22T07:28:02.6080778Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-22T07:28:02.6082532Z with:
+2026-11-22T07:28:02.6083116Z   persist-credentials: false
+2026-11-22T07:28:02.6083836Z   repository: jumonja-maker/CurseTorrent
+2026-11-22T07:28:02.6088214Z   token: ***
+2026-11-22T07:28:02.6088750Z   ssh-strict: true
+2026-11-22T07:28:02.6089301Z   ssh-user: git
+2026-11-22T07:28:02.6089802Z   clean: true
+2026-11-22T07:28:02.6090301Z   sparse-checkout-cone-mode: true
+2026-11-22T07:28:02.6090920Z   fetch-depth: 1
+2026-11-22T07:28:02.6091410Z   fetch-tags: false
+2026-11-22T07:28:02.6091959Z   show-progress: true
+2026-11-22T07:28:02.6092464Z   lfs: false
+2026-11-22T07:28:02.6092927Z   submodules: false
+2026-11-22T07:28:02.6093472Z   set-safe-directory: true
+2026-11-22T07:28:02.6094530Z   allow-unsafe-pr-checkout: false
+2026-11-22T07:28:02.6095491Z env:
+2026-11-22T07:28:02.6096039Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:28:02.6096643Z   DOTNET_NOLOGO: 1
+2026-11-22T07:28:02.6097249Z   AUDIT_UI_ONLY: true
+2026-11-22T07:28:02.6097760Z ##[endgroup]
+2026-11-22T07:28:02.7771234Z Syncing repository: jumonja-maker/CurseTorrent
+2026-11-22T07:28:02.7773153Z ##[group]Getting Git version info
+2026-11-22T07:28:02.7773860Z Working directory is 'D:\a\CurseTorrent\CurseTorrent'
+2026-11-22T07:28:02.8596277Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-22T07:28:03.2739643Z git version 2.56.1.windows.1
+2026-11-22T07:28:03.2797187Z ##[endgroup]
+2026-11-22T07:28:03.2816414Z Temporarily overriding HOME='D:\a\_temp\cc54787d-3dad-47d0-95d1-35eb0381adf2' before making global git config changes
+2026-11-22T07:28:03.2821767Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-22T07:28:03.2830074Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\CurseTorrent\CurseTorrent
+2026-11-22T07:28:03.3595332Z Deleting the contents of 'D:\a\CurseTorrent\CurseTorrent'
+2026-11-22T07:28:03.3600525Z ##[group]Determining repository object format
+2026-11-22T07:28:03.3603025Z ##[endgroup]
+2026-11-22T07:28:03.3604427Z ##[group]Initializing the repository
+2026-11-22T07:28:03.3612434Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\CurseTorrent\CurseTorrent
+2026-11-22T07:28:03.4584804Z Initialized empty Git repository in D:/a/CurseTorrent/CurseTorrent/.git/
+2026-11-22T07:28:03.4638789Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/jumonja-maker/CurseTorrent
+2026-11-22T07:28:03.5379197Z ##[endgroup]
+2026-11-22T07:28:03.5381622Z ##[group]Disabling automatic garbage collection
+2026-11-22T07:28:03.5389358Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-22T07:28:03.5868542Z ##[endgroup]
+2026-11-22T07:28:03.5870843Z ##[group]Setting up auth
+2026-11-22T07:28:03.5872508Z Removing SSH command configuration
+2026-11-22T07:28:03.5881917Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-22T07:28:03.6418061Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-22T07:28:05.2810712Z Removing HTTP extra header
+2026-11-22T07:28:05.2821759Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-22T07:28:05.3220921Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-22T07:28:05.9055018Z Removing includeIf entries pointing to credentials config files
+2026-11-22T07:28:05.9066372Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-22T07:28:05.9482020Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-22T07:28:06.5094626Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-22T07:28:06.5484541Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path D:\a\_temp\git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:06.5879694Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path D:\a\_temp\git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:06.6271703Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:06.6678932Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:06.7082993Z ##[endgroup]
+2026-11-22T07:28:06.7083612Z ##[group]Fetching the repository
+2026-11-22T07:28:06.7096528Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0992b0936dc184933b6b45e470f2f70739be0853:refs/remotes/origin/audit/2026-11-22
+2026-11-22T07:28:07.9838845Z From https://github.com/jumonja-maker/CurseTorrent
+2026-11-22T07:28:07.9839588Z  * [new ref]         0992b0936dc184933b6b45e470f2f70739be0853 -> origin/audit/2026-11-22
+2026-11-22T07:28:07.9894645Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/audit/2026-11-22
+2026-11-22T07:28:08.0250018Z   origin/audit/2026-11-22
+2026-11-22T07:28:08.0298667Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/audit/2026-11-22
+2026-11-22T07:28:08.0638739Z 0992b0936dc184933b6b45e470f2f70739be0853
+2026-11-22T07:28:08.0678868Z ##[endgroup]
+2026-11-22T07:28:08.0679267Z ##[group]Determining the checkout info
+2026-11-22T07:28:08.0679962Z ##[endgroup]
+2026-11-22T07:28:08.0689251Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-11-22T07:28:08.1140415Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-11-22T07:28:08.1549541Z ##[group]Checking out the ref
+2026-11-22T07:28:08.1560496Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B audit/2026-11-22 refs/remotes/origin/audit/2026-11-22
+2026-11-22T07:28:08.2228466Z Switched to a new branch 'audit/2026-11-22'
+2026-11-22T07:28:08.2243750Z branch 'audit/2026-11-22' set up to track 'origin/audit/2026-11-22'.
+2026-11-22T07:28:08.2299871Z ##[endgroup]
+2026-11-22T07:28:08.2868411Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-11-22T07:28:08.3249139Z 0992b0936dc184933b6b45e470f2f70739be0853
+2026-11-22T07:28:08.3304955Z ##[group]Removing auth
+2026-11-22T07:28:08.3305407Z Removing SSH command configuration
+2026-11-22T07:28:08.3313950Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-22T07:28:08.3703035Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-22T07:28:08.9346977Z Removing HTTP extra header
+2026-11-22T07:28:08.9359929Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-22T07:28:08.9768131Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-22T07:28:09.5429497Z Removing includeIf entries pointing to credentials config files
+2026-11-22T07:28:09.5438142Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-22T07:28:09.5785709Z includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path
+2026-11-22T07:28:09.5786401Z includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path
+2026-11-22T07:28:09.5787581Z includeif.gitdir:/github/workspace/.git.path
+2026-11-22T07:28:09.5788110Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-22T07:28:09.5841151Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path
+2026-11-22T07:28:09.6194172Z D:\a\_temp\git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:09.6246096Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git.path D\:\\a\\_temp\\git\-credentials\-fffd69fb\-9b54\-4a81\-94a5\-59e2c6688378\.config
+2026-11-22T07:28:09.6655058Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path
+2026-11-22T07:28:09.7004375Z D:\a\_temp\git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:09.7058199Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/CurseTorrent/CurseTorrent/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-fffd69fb\-9b54\-4a81\-94a5\-59e2c6688378\.config
+2026-11-22T07:28:09.7460192Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-22T07:28:09.7816536Z /github/runner_temp/git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:09.7875205Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-fffd69fb\-9b54\-4a81\-94a5\-59e2c6688378\.config
+2026-11-22T07:28:09.8306952Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-22T07:28:09.8651015Z /github/runner_temp/git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config
+2026-11-22T07:28:09.8704348Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-fffd69fb\-9b54\-4a81\-94a5\-59e2c6688378\.config
+2026-11-22T07:28:09.9101223Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-22T07:28:10.4860006Z Removing credentials config 'D:\a\_temp\git-credentials-fffd69fb-9b54-4a81-94a5-59e2c6688378.config'
+2026-11-22T07:28:10.4872017Z ##[endgroup]
+2026-11-22T07:28:10.5272498Z ##[group]Run actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73
+2026-11-22T07:28:10.5272946Z with:
+2026-11-22T07:28:10.5273143Z   dotnet-version: 10.0.x
+2026-11-22T07:28:10.5273366Z   skip-lts-prepass: false
+2026-11-22T07:28:10.5273564Z   cache: false
+2026-11-22T07:28:10.5273725Z env:
+2026-11-22T07:28:10.5273895Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:28:10.5274122Z   DOTNET_NOLOGO: 1
+2026-11-22T07:28:10.5274306Z   AUDIT_UI_ONLY: true
+2026-11-22T07:28:10.5274495Z ##[endgroup]
+2026-11-22T07:28:10.8103938Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command & 'D:\a\_actions\actions\setup-dotnet\0f4a354dd5547a28c70b7853dbd95d5b67886e73\externals\install-dotnet.ps1' -SkipNonVersionedFiles -Runtime dotnet -Channel LTS
+2026-11-22T07:28:12.0883255Z dotnet-install: .NET Core Runtime with version '10.0.15' is already installed.
+2026-11-22T07:28:12.2226926Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command & 'D:\a\_actions\actions\setup-dotnet\0f4a354dd5547a28c70b7853dbd95d5b67886e73\externals\install-dotnet.ps1' -SkipNonVersionedFiles -Channel 10.0
+2026-11-22T07:28:12.9982116Z dotnet-install: .NET Core SDK with version '10.0.404' is already installed.
+2026-11-22T07:28:13.1049709Z ##[group]Run $ErrorActionPreference = 'Stop'
+2026-11-22T07:28:13.1050188Z [36;1m$ErrorActionPreference = 'Stop'[0m
+2026-11-22T07:28:13.1050706Z [36;1mdotnet build audit/ui/WindowsUiAudit/WindowsUiAudit.csproj -c Release -m:1[0m
+2026-11-22T07:28:13.1051326Z [36;1mif ($LASTEXITCODE -ne 0) { throw 'WPF audit build failed' }[0m
+2026-11-22T07:28:13.1051747Z [36;1m$output = Join-Path $env:RUNNER_TEMP 'CurseTorrent-ui-audit'[0m
+2026-11-22T07:28:13.1052173Z [36;1mNew-Item -ItemType Directory -Path $output -Force | Out-Null[0m
+2026-11-22T07:28:13.1052886Z [36;1m$app = Join-Path $PWD 'audit/ui/WindowsUiAudit/bin/Release/net10.0-windows/WindowsUiAudit.exe'[0m
+2026-11-22T07:28:13.1053860Z [36;1m$process = Start-Process -FilePath $app -ArgumentList ('"' + $output + '"') -PassThru -RedirectStandardOutput (Join-Path $output 'stdout.txt') -RedirectStandardError (Join-Path $output 'stderr.txt')[0m
+2026-11-22T07:28:13.1054705Z [36;1m$finished = $process.WaitForExit(120000)[0m
+2026-11-22T07:28:13.1055013Z [36;1mif (-not $finished) { $process.Kill() }[0m
+2026-11-22T07:28:13.1055293Z [36;1m$process.WaitForExit()[0m
+2026-11-22T07:28:13.1055613Z [36;1mGet-Content (Join-Path $output 'stdout.txt') | Write-Host[0m
+2026-11-22T07:28:13.1056013Z [36;1mGet-Content (Join-Path $output 'stderr.txt') | Write-Host[0m
+2026-11-22T07:28:13.1056407Z [36;1mforeach ($file in Get-ChildItem $output -Filter '*.png') {[0m
+2026-11-22T07:28:13.1056772Z [36;1m  Write-Host ('AUDIT_IMAGE_BEGIN ' + $file.Name)[0m
+2026-11-22T07:28:13.1057195Z [36;1m  $encoded = [Convert]::ToBase64String([IO.File]::ReadAllBytes($file.FullName))[0m
+2026-11-22T07:28:13.1058128Z [36;1m  for ($i = 0; $i -lt $encoded.Length; $i += 6000) { Write-Host ('AUDIT_IMAGE_DATA ' + $encoded.Substring($i, [Math]::Min(6000, $encoded.Length - $i))) }[0m
+2026-11-22T07:28:13.1058737Z [36;1m  Write-Host ('AUDIT_IMAGE_END ' + $file.Name)[0m
+2026-11-22T07:28:13.1059007Z [36;1m}[0m
+2026-11-22T07:28:13.1059246Z [36;1mif (-not $finished) { throw 'WPF audit timed out' }[0m
+2026-11-22T07:28:13.1059707Z [36;1mif ($process.ExitCode -ne 0) { throw "WPF audit process failed: $($process.ExitCode)" }[0m
+2026-11-22T07:28:13.1837482Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-22T07:28:13.1837827Z env:
+2026-11-22T07:28:13.1838022Z   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+2026-11-22T07:28:13.1838251Z   DOTNET_NOLOGO: 1
+2026-11-22T07:28:13.1838428Z   AUDIT_UI_ONLY: true
+2026-11-22T07:28:13.1838647Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-11-22T07:28:13.1838878Z ##[endgroup]
+2026-11-22T07:28:20.8828793Z   Determining projects to restore...
+2026-11-22T07:28:29.9343013Z   Restored D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.Core\CurseTorrent.Core.csproj (in 8.32 sec).
+2026-11-22T07:28:29.9357638Z   Restored D:\a\CurseTorrent\CurseTorrent\audit\ui\WindowsUiAudit\WindowsUiAudit.csproj (in 8.32 sec).
+2026-11-22T07:28:29.9374455Z   Restored D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.App\CurseTorrent.App.csproj (in 8.32 sec).
+2026-11-22T07:28:36.5329451Z   CurseTorrent.Core -> D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.Core\bin\Release\net10.0\CurseTorrent.Core.dll
+2026-11-22T07:28:38.6672622Z   CurseTorrent.App -> D:\a\CurseTorrent\CurseTorrent\src\CurseTorrent.App\bin\Release\net10.0-windows\CurseTorrent.dll
+2026-11-22T07:28:39.2149995Z   WindowsUiAudit -> D:\a\CurseTorrent\CurseTorrent\audit\ui\WindowsUiAudit\bin\Release\net10.0-windows\WindowsUiAudit.dll
+2026-11-22T07:28:39.2240260Z 
+2026-11-22T07:28:39.2247113Z Build succeeded.
+2026-11-22T07:28:39.2254850Z     0 Warning(s)
+2026-11-22T07:28:39.2255140Z     0 Error(s)
+2026-11-22T07:28:39.2256983Z 
+2026-11-22T07:28:39.2257271Z Time Elapsed 00:00:21.81
+2026-11-22T07:28:46.5802846Z AUDIT_JSON {"test":"environment","data":{"framework":".NET 10.0.15","os":"Microsoft Windows NT 10.0.26100.0","dpi":{"DpiScaleX":1,"DpiScaleY":1,"PixelsPerDip":1,"PixelsPerInchX":96,"PixelsPerInchY":96},"workArea":"0;0;1024;720","main":{"width":1044,"height":788,"left":-113,"top":-40},"mainMinimum":{"width":940,"height":620}}}
+2026-11-22T07:28:46.5805370Z AUDIT_SCREENSHOT 01-main-files.png
+2026-11-22T07:28:46.5811349Z AUDIT_JSON {"test":"file-size-sort-ascending","data":{"direction":"Ascending","order":[{"Path":"10-bytes.bin","Size":"10 \u0411"},{"Path":"100-gib.bin","Size":"100 \u0413\u0438\u0411"},{"Path":"2-kib.bin","Size":"2,0 \u041A\u0438\u0411"},{"Path":"900-mib.bin","Size":"900 \u041C\u0438\u0411"}],"expectedAscending":["10-bytes.bin","2-kib.bin","900-mib.bin","100-gib.bin"],"isNumericAscending":false}}
+2026-11-22T07:28:46.5816551Z AUDIT_JSON {"test":"file-progress-sort-ascending","data":{"direction":"Ascending","order":[{"Path":"900-mib.bin","ProgressText":"100,0%"},{"Path":"100-gib.bin","ProgressText":"12,0%"},{"Path":"10-bytes.bin","ProgressText":"2,0%"},{"Path":"2-kib.bin","ProgressText":"20,0%"}],"expectedAscending":["10-bytes.bin","100-gib.bin","2-kib.bin","900-mib.bin"],"isNumericAscending":false}}
+2026-11-22T07:28:46.5819119Z AUDIT_SCREENSHOT 02-main-sorted-progress.png
+2026-11-22T07:28:46.5821931Z AUDIT_JSON {"test":"priority-display","data":{"expectedLabel":"\u041E\u0431\u044B\u0447\u043D\u044B\u0439","renderedText":["\u2304","PriorityOption { Value = Normal, Label = \u041E\u0431\u044B\u0447\u043D\u044B\u0439 }"],"DisplayMemberPath":"Label","selectedValue":"Normal"}}
+2026-11-22T07:28:46.5829362Z AUDIT_JSON {"test":"priority-dropdown-display","data":{"renderedText":["\u041D\u0435 \u0441\u043A\u0430\u0447\u0438\u0432\u0430\u0442\u044C","\u041D\u0438\u0437\u043A\u0438\u0439","\u041E\u0431\u044B\u0447\u043D\u044B\u0439","\u0412\u044B\u0441\u043E\u043A\u0438\u0439"],"expectedLabels":["\u041D\u0435 \u0441\u043A\u0430\u0447\u0438\u0432\u0430\u0442\u044C","\u041D\u0438\u0437\u043A\u0438\u0439","\u041E\u0431\u044B\u0447\u043D\u044B\u0439","\u0412\u044B\u0441\u043E\u043A\u0438\u0439"]}}
+2026-11-22T07:28:46.5838951Z AUDIT_JSON {"test":"timer-refresh-dropdown","data":{"mainSelectionPreserved":true,"fileSelectionPreserved":true,"sameComboAttached":true,"IsDropDownOpen":true,"IsKeyboardFocusWithin":true,"focusedElement":"ComboBoxItem"}}
+2026-11-22T07:28:46.5846044Z AUDIT_JSON {"test":"priority-binding","data":{"calls":1,"last":{"id":"active","path":"900-mib.bin","priority":"High"},"expectedPath":"900-mib.bin","expectedPriority":"High"}}
+2026-11-22T07:28:46.5848474Z AUDIT_SCREENSHOT 03-main-details.png
+2026-11-22T07:28:46.5853894Z AUDIT_SCREENSHOT 04-main-minimum.png
+2026-11-22T07:28:46.5859837Z AUDIT_JSON {"test":"horizontal-scroll-page-click","data":{"available":false,"ScrollableWidth":0}}
+2026-11-22T07:28:46.5881870Z AUDIT_JSON {"test":"minimum-main-layout","data":{"main":{"width":940,"height":620,"left":-113,"top":-40},"torrentGrid":{"IsEmpty":false,"Location":{"X":224,"Y":173},"Size":{"IsEmpty":false,"Width":672,"Height":129},"X":224,"Y":173,"Width":672,"Height":129,"Left":224,"Top":173,"Right":896,"Bottom":302,"TopLeft":{"X":224,"Y":173},"TopRight":{"X":896,"Y":173},"BottomLeft":{"X":224,"Y":302},"BottomRight":{"X":896,"Y":302}},"fileGrid":{"IsEmpty":false,"Location":{"X":229,"Y":356},"Size":{"IsEmpty":false,"Width":662,"Height":144},"X":229,"Y":356,"Width":662,"Height":144,"Left":229,"Top":356,"Right":891,"Bottom":500,"TopLeft":{"X":229,"Y":356},"TopRight":{"X":891,"Y":356},"BottomLeft":{"X":229,"Y":500},"BottomRight":{"X":891,"Y":500}},"toolbar":{"IsEmpty":false,"Location":{"X":222,"Y":115},"Size":{"IsEmpty":false,"Width":676,"Height":40},"X":222,"Y":115,"Width":676,"Height":40,"Left":222,"Top":115,"Right":898,"Bottom":155,"TopLeft":{"X":222,"Y":115},"TopRight":{"X":898,"Y":115},"BottomLeft":{"X":222,"Y":155},"BottomRight":{"X":898,"Y":155}},"columns":[{"header":"\u0418\u041C\u042F / \u0421\u041E\u0421\u0422\u041E\u042F\u041D\u0418\u0415","requested":"*","actual":195,"minimum":195},{"header":"\u0420\u0410\u0417\u041C\u0415\u0420","requested":"92","actual":70,"minimum":20},{"header":"\u041F\u0420\u041E\u0413\u0420\u0415\u0421\u0421","requested":"120","actual":98,"minimum":20},{"header":"\u2193 \u041F\u0420\u0418\u0401\u041C","requested":"103","actual":81,"minimum":20},{"header":"\u2191 \u041E\u0422\u0414\u0410\u0427\u0410","requested":"103","actual":81,"minimum":20},{"header":"\u041F\u0418\u0420\u042B","requested":"60","actual":38,"minimum":20},{"header":"\u041E\u0421\u0422\u0410\u041B\u041E\u0421\u042C","requested":"114","actual":92,"minimum":20}],"scrollViewers":[{"Name":"DG_ScrollViewer","ScrollableWidth":0,"ScrollableHeight":3,"ViewportWidth":655,"ExtentWidth":655}],"notes":"Native DPI is reported above. This is the declared minimum size, not a simulated DPI change."}}
+2026-11-22T07:28:46.5892345Z AUDIT_SCREENSHOT 05-settings.png
+2026-11-22T07:28:46.5893326Z AUDIT_JSON {"test":"settings-window","data":{"actual":{"width":690,"height":760,"left":64,"top":0},"minimum":{"width":640,"height":630}}}
+2026-11-22T07:28:46.5894285Z AUDIT_SCREENSHOT 06-add-torrent.png
+2026-11-22T07:28:46.5894765Z AUDIT_SCREENSHOT 07-magnet.png
+2026-11-22T07:28:46.5895181Z AUDIT_SCREENSHOT 08-add-magnet.png
+2026-11-22T07:28:46.5897004Z AUDIT_JSON {"test":"long-magnet-name-layout","data":{"magnetCharacters":11161,"displayNameCharacters":1999,"acceptedByRealCoreInspector":true,"window":{"width":760,"height":640,"left":29,"top":34},"addButton":"598;747;120;35","addButtonFullyInWindow":false,"title":"26;67;692;428"}}
+2026-11-22T07:28:46.5899754Z AUDIT_SCREENSHOT 09-add-long-magnet.png
+2026-11-22T07:28:46.5906077Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":100,"elapsedMilliseconds":52.3095,"includesInitialRows":true}}
+2026-11-22T07:28:46.5910264Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":100,"elapsedMilliseconds":57.1116,"includesInitialRows":false}}
+2026-11-22T07:28:46.5914843Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":1000,"elapsedMilliseconds":69.9649,"includesInitialRows":true}}
+2026-11-22T07:28:46.5919941Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":1000,"elapsedMilliseconds":47.3695,"includesInitialRows":false}}
+2026-11-22T07:28:46.5925102Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":10000,"elapsedMilliseconds":1226.748,"includesInitialRows":true}}
+2026-11-22T07:28:46.5930101Z AUDIT_JSON {"test":"refresh-timing","data":{"torrentCount":10000,"elapsedMilliseconds":72.848,"includesInitialRows":false}}
+2026-11-22T07:28:46.5935039Z AUDIT_JSON {"test":"binding-errors","data":{"count":0,"messages":[]}}
+2026-11-22T07:28:46.6076690Z AUDIT_IMAGE_BEGIN 01-main-files.png
+2026-11-22T07:28:46.7833852Z AUDIT_IMAGE_END 01-main-files.png
+2026-11-22T07:28:46.7834155Z AUDIT_IMAGE_BEGIN 02-main-sorted-progress.png
+2026-11-22T07:28:46.8817718Z AUDIT_IMAGE_END 02-main-sorted-progress.png
+2026-11-22T07:28:46.8818021Z AUDIT_IMAGE_BEGIN 03-main-details.png
+2026-11-22T07:28:46.9977197Z AUDIT_IMAGE_END 03-main-details.png
+2026-11-22T07:28:46.9977483Z AUDIT_IMAGE_BEGIN 04-main-minimum.png
+2026-11-22T07:28:47.0765817Z AUDIT_IMAGE_END 04-main-minimum.png
+2026-11-22T07:28:47.0766094Z AUDIT_IMAGE_BEGIN 05-settings.png
+2026-11-22T07:28:47.1420077Z AUDIT_IMAGE_END 05-settings.png
+2026-11-22T07:28:47.1420380Z AUDIT_IMAGE_BEGIN 06-add-torrent.png
+2026-11-22T07:28:47.1844195Z AUDIT_IMAGE_END 06-add-torrent.png
+2026-11-22T07:28:47.1844477Z AUDIT_IMAGE_BEGIN 07-magnet.png
+2026-11-22T07:28:47.2061896Z AUDIT_IMAGE_END 07-magnet.png
+2026-11-22T07:28:47.2157554Z AUDIT_IMAGE_BEGIN 08-add-magnet.png
+2026-11-22T07:28:47.2662418Z AUDIT_IMAGE_END 08-add-magnet.png
+2026-11-22T07:28:47.2662727Z AUDIT_IMAGE_BEGIN 09-add-long-magnet.png
+2026-11-22T07:28:47.3967851Z AUDIT_IMAGE_END 09-add-long-magnet.png
+2026-11-22T07:28:47.4195760Z Post job cleanup.
+2026-11-22T07:28:47.6022620Z Post job cleanup.
+2026-11-22T07:28:47.8059962Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-22T07:28:47.8444179Z git version 2.56.1.windows.1
+2026-11-22T07:28:47.8521073Z Temporarily overriding HOME='D:\a\_temp\499992bd-4f70-4298-ae29-3dcf4e7a5a0c' before making global git config changes
+2026-11-22T07:28:47.8522559Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-22T07:28:47.8533817Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\CurseTorrent\CurseTorrent
+2026-11-22T07:28:47.8961878Z Removing SSH command configuration
+2026-11-22T07:28:47.8979581Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-22T07:28:47.9388760Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-22T07:28:48.5127936Z Removing HTTP extra header
+2026-11-22T07:28:48.5138197Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-22T07:28:48.5534782Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-22T07:28:49.1132210Z Removing includeIf entries pointing to credentials config files
+2026-11-22T07:28:49.1143748Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-22T07:28:49.1551540Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-22T07:28:49.7359250Z Cleaning up orphan processes
+2026-11-22T07:28:49.7705721Z Terminate orphan process: pid (5628) (VBCSCompiler)
+2026-11-22T07:28:49.7786837Z Terminate orphan process: pid (7744) (conhost)

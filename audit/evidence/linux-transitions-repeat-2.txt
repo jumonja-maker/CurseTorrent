@@ -1,0 +1,22 @@
+AUDIT mode=transitions root=/tmp/cursetorrent-audit-transitions-5e77b139fbd04c0593f8653dc4096c1d
+CHECK PASS: recheck/resume/pause iteration 0
+CHECK PASS: recheck/resume/pause iteration 1
+CHECK PASS: recheck/resume/pause iteration 2
+CHECK PASS: recheck/resume/pause iteration 3
+CHECK PASS: recheck/resume/pause iteration 4
+CHECK PASS: recheck/resume/pause iteration 5
+CHECK PASS: recheck/resume/pause iteration 6
+CHECK PASS: recheck/resume/pause iteration 7
+CHECK PASS: recheck/resume/pause iteration 8
+CHECK PASS: recheck/resume/pause iteration 9
+CHECK PASS: recheck/resume/pause iteration 10
+CHECK PASS: recheck/resume/pause iteration 11
+CHECK PASS: recheck/resume/pause iteration 12
+CHECK PASS: recheck/resume/pause iteration 13
+CHECK PASS: recheck/resume/pause iteration 14
+CHECK PASS: recheck/resume/pause iteration 15
+System.InvalidOperationException: CHECK FAIL: recheck/resume/pause iteration 16
+   at Program.<<Main>$>g__Check|0_6(Boolean condition, String name) in /workspace/scratch/e9d6e7421650/cursetorrent-audit/core/Program.cs:line 133
+   at Program.<<Main>$>g__TransitionAudit|0_9(String root) in /workspace/scratch/e9d6e7421650/cursetorrent-audit/core/Program.cs:line 179
+   at Program.<<Main>$>g__TransitionAudit|0_9(String root) in /workspace/scratch/e9d6e7421650/cursetorrent-audit/core/Program.cs:line 190
+   at Program.<Main>$(String[] args) in /workspace/scratch/e9d6e7421650/cursetorrent-audit/core/Program.cs:line 19

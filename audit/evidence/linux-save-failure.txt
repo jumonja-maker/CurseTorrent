@@ -1,0 +1,10 @@
+AUDIT mode=save-failure root=/tmp/cursetorrent-audit-save-failure-6c0973e323f548feb21f3082d75b150c
+EXPECTED IO FAILURE settings.json blocked by directory: The file '/tmp/cursetorrent-audit-save-failure-6c0973e323f548feb21f3082d75b150c/state/settings.json' already exists.
+CHECK PASS: Settings snapshot rolls back failed update
+CHECK PASS: engine rate rolls back failed update
+EXPECTED IO FAILURE remove with unwritable session target: The file '/tmp/cursetorrent-audit-save-failure-6c0973e323f548feb21f3082d75b150c/state/session.json' already exists.
+CHECK PASS: failed remove leaves paused visible task
+EXPECTED IO FAILURE add with unwritable session target: The file '/tmp/cursetorrent-audit-save-failure-6c0973e323f548feb21f3082d75b150c/state/session.json' already exists.
+CHECK PASS: failed add rolls back public task
+CHECK PASS: retry add after rollback succeeds without phantom manager or reserved paths
+CHECK PASS: all failed atomic-write temporary files cleaned
