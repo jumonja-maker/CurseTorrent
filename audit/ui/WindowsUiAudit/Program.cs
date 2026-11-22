@@ -131,9 +131,22 @@ internal static class Audit
         files.ScrollIntoView(firstFile);
         await Idle();
         var combo = Descendants<ComboBox>(files).First();
+        Record("priority-display", new
+        {
+            expectedLabel = (combo.SelectedItem as PriorityOption)?.Label,
+            renderedText = Descendants<TextBlock>(combo).Select(block => block.Text).Where(text => !string.IsNullOrWhiteSpace(text)).ToArray(),
+            combo.DisplayMemberPath,
+            selectedValue = combo.SelectedValue?.ToString()
+        });
         combo.Focus();
         combo.IsDropDownOpen = true;
         await Idle();
+        var popup = (Popup)combo.Template.FindName("PART_Popup", combo);
+        Record("priority-dropdown-display", new
+        {
+            renderedText = Descendants<TextBlock>(popup.Child).Select(block => block.Text).Where(text => !string.IsNullOrWhiteSpace(text)).ToArray(),
+            expectedLabels = new[] { "Не скачивать", "Низкий", "Обычный", "Высокий" }
+        });
         string? selectedBefore = (torrents.SelectedItem as TorrentRow)?.Id;
         string? fileBefore = (files.SelectedItem as TorrentFileRow)?.Path;
         Refresh(main);
@@ -181,6 +194,8 @@ internal static class Audit
             torrentGrid = Bounds(torrents, main),
             fileGrid = Bounds(files, main),
             toolbar = Bounds((FrameworkElement)main.FindName("Toolbar"), main),
+            columns = torrents.Columns.Select(column => new { header = column.Header?.ToString(), requested = column.Width.ToString(), actual = column.ActualWidth, minimum = column.MinWidth }).ToArray(),
+            scrollViewers = Descendants<ScrollViewer>(torrents).Select(viewer => new { viewer.Name, viewer.ScrollableWidth, viewer.ScrollableHeight, viewer.ViewportWidth, viewer.ExtentWidth }).ToArray(),
             notes = "Native DPI is reported above. This is the declared minimum size, not a simulated DPI change."
         });
         main.Width = 1250;
@@ -319,7 +334,9 @@ internal static class Audit
     private static object Geometry(Window window) => new { width = window.ActualWidth, height = window.ActualHeight, left = window.Left, top = window.Top };
     private static void SaveImage(Window window, string path)
     {
-        var visual = (FrameworkElement)window.Content;
+        // Render the complete WPF Window visual. Rendering its Content directly
+        // with a Margin crops 26 pixels from the dialog and loses Window.Background.
+        FrameworkElement visual = window;
         var bitmap = new RenderTargetBitmap((int)Math.Ceiling(visual.ActualWidth), (int)Math.Ceiling(visual.ActualHeight), 96, 96, PixelFormats.Pbgra32);
         bitmap.Render(visual);
         var encoder = new PngBitmapEncoder();
