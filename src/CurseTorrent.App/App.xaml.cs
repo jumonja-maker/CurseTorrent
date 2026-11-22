@@ -85,6 +85,7 @@ public partial class App : System.Windows.Application
         MainWindow = _window;
         _window.Show();
         await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+        VerifyWindowTheme(_window);
         _window.RefreshSmokeView(true);
         // Materialize actual row/file templates and every dialog, without network traffic.
         await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
@@ -103,6 +104,7 @@ public partial class App : System.Windows.Application
             dialog.Show();
             await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
             dialog.UpdateLayout();
+            VerifyWindowTheme(dialog);
             dialog.Close();
         }
         service.IncludeTestTorrent = false;
@@ -124,6 +126,13 @@ public partial class App : System.Windows.Application
         }
         if (bindingTrace.HasErrors) throw new InvalidOperationException("WPF binding errors: " + bindingTrace.Messages);
         await _window.RequestExitAsync();
+    }
+
+    private static void VerifyWindowTheme(Window window)
+    {
+        if (window.Background is not SolidColorBrush background ||
+            background.Color != Color.FromRgb(0x10, 0x12, 0x16) || background.Opacity != 1)
+            throw new InvalidOperationException($"Dark theme was not applied to {window.GetType().Name}.");
     }
 
     private void OnDispatcherException(object sender, DispatcherUnhandledExceptionEventArgs e)
