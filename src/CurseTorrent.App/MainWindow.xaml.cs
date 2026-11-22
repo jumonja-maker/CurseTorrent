@@ -151,16 +151,16 @@ public partial class MainWindow : Window
             var snapshots = _service.GetSnapshots(selectedId);
             var ids = snapshots.Select(value => value.Id).ToHashSet(StringComparer.Ordinal);
             _synchronizing = true;
-            using (_view.DeferRefresh())
+            for (int i = _rows.Count - 1; i >= 0; i--) if (!ids.Contains(_rows[i].Id)) _rows.RemoveAt(i);
+            var existing = _rows.ToDictionary(row => row.Id, StringComparer.Ordinal);
+            foreach (var snapshot in snapshots)
             {
-                for (int i = _rows.Count - 1; i >= 0; i--) if (!ids.Contains(_rows[i].Id)) _rows.RemoveAt(i);
-                var existing = _rows.ToDictionary(row => row.Id, StringComparer.Ordinal);
-                foreach (var snapshot in snapshots)
-                {
-                    if (existing.TryGetValue(snapshot.Id, out var row)) row.Update(snapshot);
-                    else _rows.Add(new TorrentRow(snapshot));
-                }
+                if (existing.TryGetValue(snapshot.Id, out var row)) row.Update(snapshot);
+                else _rows.Add(new TorrentRow(snapshot));
             }
+            // Source mutations must be processed immediately by WPF's ListCollectionView.
+            // Refresh afterwards so existing rows are re-filtered when their state changes.
+            _view.Refresh();
             if (selectedId is not null && TorrentGrid.SelectedItem is null)
                 TorrentGrid.SelectedItem = _rows.FirstOrDefault(row => row.Id == selectedId && MatchesFilter(row));
             CountLabel.Text = _rows.Count == 0 ? "Добавьте первый торрент" : $"Торрентов: {_rows.Count}   ·   Активных: {snapshots.Count(value => value.State is DownloadState.Downloading or DownloadState.Seeding or DownloadState.Metadata or DownloadState.Checking)}";
