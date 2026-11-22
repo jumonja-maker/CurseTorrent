@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AllowUnsafeBlocks Condition="$(TargetFramework) == 'netstandard2.0' Or $(TargetFramework) == 'net472'">true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <UseBitOps>true</UseBitOps>
+    <UseMemoryExtensions>true</UseMemoryExtensions>
+    <UseNullabilityHelpers>true</UseNullabilityHelpers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory" Condition="$(TargetFramework) == 'netstandard2.0' Or $(TargetFramework) == 'net472'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework) == 'net472'">
+    <Reference Include="System.Web" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>

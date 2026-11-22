@@ -152,8 +152,12 @@ internal static class IntegrationSuite
                 "Session restores after the original .torrent file is deleted");
             Require(service.Settings.DownloadLimitKiB == 64 && service.Settings.DownloadDirectory == downloads,
                 "Settings survive an application restart");
+            // Restored payload is verified before trusting cached progress. Paused intent
+            // must remain paused after this read-only startup verification completes.
+            await UntilAsync(() => Snapshot(service, id).State != DownloadState.Checking,
+                "restored payload verification", () => Snapshot(service, id).ErrorMessage);
             var restored = Snapshot(service, id);
-            Require(restored.State == DownloadState.Paused, "Restart preserves paused intent");
+            Require(restored.State == DownloadState.Paused, "Restart preserves paused intent after verification");
             Require(restored.Files.Single(f => f.Path == "alpha.bin").Priority == FilePriority.High &&
                     restored.Files.Single(f => f.Path == "beta.bin").Priority == FilePriority.Skip,
                 "Restart preserves per-file priorities");
@@ -441,8 +445,8 @@ internal static class IntegrationSuite
                     "Pause preserves cumulative upload bytes after the engine resets its monitor");
                 await service.ShutdownAsync();
             }
-            // Simulate interruption between completing a file and its final rename.
-            // The next AddAsync loads fast-resume data before it returns a manager.
+            // External data is readable but has no receipt granting rename permission.
+            // A verified .!mt must remain readable under its actual name after restore.
             var completePath = Path.Combine(payloadDirectory, "alpha.bin");
             File.Move(completePath, completePath + ".!mt");
             await using (var service = new TorrentService(appDirectory, offlineMode: true))
@@ -450,12 +454,30 @@ internal static class IntegrationSuite
                 await service.InitializeAsync();
                 Require(Snapshot(service, id).UploadedBytes >= uploaded,
                     "Cumulative upload bytes survive application restart");
+                await UntilAsync(() => Snapshot(service, id).State != DownloadState.Checking,
+                    "restored seeding payload verification", () => Snapshot(service, id).ErrorMessage);
                 Require(Snapshot(service, id).State == DownloadState.Paused,
                     "Paused seeding remains paused after restart");
-                await UntilAsync(() => File.Exists(completePath), "fast-resume completes interrupted file rename",
-                    () => Snapshot(service, id).ErrorMessage);
-                await RequireSameHashAsync(Path.Combine(seedDirectory, "alpha.bin"), completePath,
-                    "Fast-resume safely restores a completed .!mt file during manager registration");
+                Require(!File.Exists(completePath) && File.Exists(completePath + ".!mt"),
+                    "Read-only restoration preserves an external completed .!mt filename");
+                await RequireSameHashAsync(Path.Combine(seedDirectory, "alpha.bin"), completePath + ".!mt",
+                    "Restoration verifies completed .!mt bytes without modifying them");
+                await service.ResumeAsync(id);
+                await UntilAsync(() => Snapshot(service, id).State == DownloadState.Seeding,
+                    "read-only seeding of restored external partial path", () => Snapshot(service, id).ErrorMessage);
+                Require(!File.Exists(completePath) && File.Exists(completePath + ".!mt"),
+                    "Seeding preserves the actual path of an unowned .!mt file");
+                await receiver.StopAsync(TimeSpan.FromSeconds(2));
+                await receiverEngine.RemoveAsync(receiver);
+                var freshReceiver = await receiverEngine.AddAsync(torrentPath, Path.Combine(root, "upload-restored-received"),
+                    new TorrentSettingsBuilder { CreateContainingDirectory = false, AllowDht = false, AllowPeerExchange = false }.ToSettings());
+                await freshReceiver.StartAsync();
+                await service.AddPeerAsync(id, new Uri($"ipv4://127.0.0.1:{receiverPort}"));
+                await UntilAsync(() => freshReceiver.Complete, "uploading from the unchanged external .!mt path",
+                    () => freshReceiver.Error?.Exception.Message ?? Snapshot(service, id).ErrorMessage);
+                await RequireSameHashAsync(Path.Combine(seedDirectory, "alpha.bin"),
+                    Path.Combine(root, "upload-restored-received", "alpha.bin"),
+                    "Restored external .!mt sends verified bytes to a fresh receiver");
             }
         }
         finally

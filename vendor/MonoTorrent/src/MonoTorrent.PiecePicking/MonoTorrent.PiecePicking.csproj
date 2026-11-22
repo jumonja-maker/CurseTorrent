@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <UseCache>true</UseCache>
+    <UseIListExtensions>true</UseIListExtensions>
+    <UseNullabilityHelpers>true</UseNullabilityHelpers>
+    <UseSimpleSpinLock>true</UseSimpleSpinLock>
+  </PropertyGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonoTorrent\MonoTorrent.csproj" />
+  </ItemGroup>
+
+</Project>

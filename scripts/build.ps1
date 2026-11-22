@@ -17,14 +17,16 @@ try {
     Push-Location $repoRoot
     try {
         if (-not $SkipTests) {
-            & dotnet restore $testProject --locked-mode
+            & dotnet restore $testProject --locked-mode --disable-parallel -m:1
             if ($LASTEXITCODE -ne 0) { throw 'Test dependency restore failed.' }
-            & dotnet run --project $testProject --configuration $Configuration --no-restore
+            & dotnet build $testProject --configuration $Configuration --no-restore -m:1
+            if ($LASTEXITCODE -ne 0) { throw 'Core test build failed.' }
+            & dotnet run --project $testProject --configuration $Configuration --no-build --no-restore
             if ($LASTEXITCODE -ne 0) { throw 'Core verification failed.' }
         }
-        & dotnet restore $appProject --runtime win-x64 --locked-mode
+        & dotnet restore $appProject --runtime win-x64 --locked-mode --disable-parallel -m:1
         if ($LASTEXITCODE -ne 0) { throw 'Windows dependency restore failed.' }
-        & dotnet publish $appProject --configuration $Configuration --runtime win-x64 --self-contained true --no-restore --output $packageRoot -p:PublishSingleFile=false -p:PublishTrimmed=false -p:PublishReadyToRun=false -p:DebugType=None -p:DebugSymbols=false
+        & dotnet publish $appProject --configuration $Configuration --runtime win-x64 --self-contained true --no-restore -m:1 --output $packageRoot -p:PublishSingleFile=false -p:PublishTrimmed=false -p:PublishReadyToRun=false -p:DebugType=None -p:DebugSymbols=false
         if ($LASTEXITCODE -ne 0) { throw 'Windows publication failed.' }
     } finally { Pop-Location }
     foreach ($name in @('LICENSE', 'THIRD-PARTY-NOTICES.md')) {
@@ -60,7 +62,7 @@ try {
         $runtimePackCount++
     }
     if ($runtimePackCount -lt 2) { throw 'The package must include notices for both .NET and Windows Desktop runtime packs.' }
-    foreach ($name in @('install.ps1', 'install.cmd', 'uninstall.ps1', 'uninstall.cmd')) {
+    foreach ($name in @('install.ps1', 'install.cmd', 'uninstall.ps1', 'uninstall.cmd', 'Installer.Common.ps1')) {
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $packageRoot
     }
     $exe = Join-Path $packageRoot 'CurseTorrent.exe'

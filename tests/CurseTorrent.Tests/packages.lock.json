@@ -7,15 +7,6 @@
         "resolved": "3.0.0",
         "contentHash": "LgRC8/8plJfvr1nCPmyHNIwP4fs346doMA/UVDZvFN0RfGJdyD2uS7Dl1AydxjVLrIvad8ghozI0vYFWcfPeYQ=="
       },
-      "MonoTorrent": {
-        "type": "Transitive",
-        "resolved": "3.0.2",
-        "contentHash": "kWy0mLj2MKX9uUGe3lnNYfyQhthjUK4IAMNJO8llXP9yB3ZYfGaAy9ag20wMcjTz2YfhKOW/uZ5FR//BYZGeYA==",
-        "dependencies": {
-          "Mono.Nat": "3.0.0",
-          "ReusableTasks": "4.0.0"
-        }
-      },
       "ReusableTasks": {
         "type": "Transitive",
         "resolved": "4.0.0",
@@ -24,7 +15,83 @@
       "cursetorrent.core": {
         "type": "Project",
         "dependencies": {
-          "MonoTorrent": "[3.0.2, )"
+          "MonoTorrent.Client": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.BEncoding": "[3.0.2-cursetorrent.1, )",
+          "ReusableTasks": "[4.0.0, )"
+        }
+      },
+      "monotorrent.bencoding": {
+        "type": "Project"
+      },
+      "monotorrent.client": {
+        "type": "Project",
+        "dependencies": {
+          "Mono.Nat": "[3.0.0, )",
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.BEncoding": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.Factories": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.PieceWriter": "[3.0.2-cursetorrent.1, )",
+          "ReusableTasks": "[4.0.0, )"
+        }
+      },
+      "monotorrent.connections": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.dht": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.factories": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Connections": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.Dht": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.PiecePicking": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.PieceWriter": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.PortForwarding": "[3.0.2-cursetorrent.1, )",
+          "MonoTorrent.Trackers": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.messages": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.piecepicking": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.piecewriter": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.portforwarding": {
+        "type": "Project",
+        "dependencies": {
+          "Mono.Nat": "[3.0.0, )",
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.trackers": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )"
         }
       }
     }

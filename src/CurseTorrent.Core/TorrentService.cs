@@ -1,11 +1,14 @@
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
 using MonoTorrent.PieceWriter;
 
 [assembly: InternalsVisibleTo("CurseTorrent.Tests")]
+[assembly: InternalsVisibleTo("CurseTorrent.RegressionTests")]
 
 namespace CurseTorrent.Core;
 
@@ -14,19 +17,20 @@ public sealed class TorrentService : ITorrentService
 {
     private sealed class SessionDocument
     {
-        public int Version { get; set; } = 1;
-        public List<SavedTorrent> Torrents { get; set; } = [];
+        [JsonRequired] public int Version { get; set; } = 1;
+        [JsonRequired] public List<SavedTorrent> Torrents { get; set; } = [];
     }
 
     private sealed class SavedTorrent
     {
-        public string Id { get; set; } = "";
-        public string Source { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string SaveDirectory { get; set; } = "";
-        public bool ShouldRun { get; set; }
-        public Dictionary<string, FilePriority> Priorities { get; set; } = [];
-        public long UploadedBytes { get; set; }
+        [JsonRequired] public string Id { get; set; } = "";
+        [JsonRequired] public string Source { get; set; } = "";
+        [JsonRequired] public string Name { get; set; } = "";
+        [JsonRequired] public string SaveDirectory { get; set; } = "";
+        [JsonRequired] public bool ShouldRun { get; set; }
+        [JsonRequired] public Dictionary<string, FilePriority> Priorities { get; set; } = [];
+        [JsonRequired] public long UploadedBytes { get; set; }
+        public bool AllowExistingFiles { get; set; }
     }
 
     private sealed class Entry(SavedTorrent saved)
@@ -38,6 +42,12 @@ public sealed class TorrentService : ITorrentService
         public long UploadBaseline { get; set; } = saved.UploadedBytes;
         public Task? HashOperation { get; set; }
         public Task? Recheck { get; set; }
+        public bool NeedsVerification { get; set; } = true;
+        public long VerificationEpoch { get; set; }
+        public Dictionary<string, PayloadFingerprint>? VerifiedFingerprints { get; set; }
+        public Dictionary<string, PayloadFingerprint>? ResumeFingerprints { get; set; }
+        public long VerifiedReceivedBytes { get; set; }
+        public Task? MetadataRestart { get; set; }
         public MagnetLink? PendingMagnet { get; set; }
         public CancellationTokenSource? MetadataCancellation { get; set; }
         public Task<ReadOnlyMemory<byte>>? MetadataOperation { get; set; }
@@ -46,13 +56,15 @@ public sealed class TorrentService : ITorrentService
     private readonly string _dataDirectory;
     private readonly bool _offlineMode;
     private readonly SemaphoreSlim _gate = new(1, 1);
+    private readonly SemaphoreSlim _metadataSlots = new(4, 4);
     private readonly object _entriesLock = new();
     private readonly object _pathLock = new();
     private readonly Dictionary<string, (Entry Owner, ITorrentManagerFile File)> _reservedPaths = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<ITorrentManagerFile> _approvedFiles = new(ReferenceEqualityComparer.Instance);
     private readonly List<Entry> _entries = [];
     private readonly List<string> _warnings = [];
-    private readonly List<Task> _backgroundTasks = [];
+    private readonly object _backgroundTasksLock = new();
+    private readonly HashSet<Task> _backgroundTasks = [];
     private readonly CancellationTokenSource _lifetime = new();
     private ClientEngine? _engine;
     private FileStream? _instanceLock;
@@ -84,19 +96,19 @@ public sealed class TorrentService : ITorrentService
             _instanceLock = new FileStream(Path.Combine(_dataDirectory, "session.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             try
             {
-                Settings = await AtomicJsonFile.ReadAsync<AppSettings>(SettingsPath, _warnings).ConfigureAwait(false) ?? new();
+                Settings = await AtomicJsonFile.ReadAsync<AppSettings>(SettingsPath, _warnings, ValidateStoredSettings).ConfigureAwait(false) ?? new();
                 try { Settings = ValidateSettings(Settings); }
                 catch (ArgumentException ex) { _warnings.Add($"Настройки сброшены: {ex.Message}"); Settings = new(); }
-                var document = await AtomicJsonFile.ReadAsync<SessionDocument>(SessionPath, _warnings).ConfigureAwait(false) ?? new();
-                if (document.Version != 1) throw new InvalidDataException("Эта версия CurseTorrent не поддерживает формат сохранённой сессии. Файлы оставлены без изменений.");
+                var document = await AtomicJsonFile.ReadAsync<SessionDocument>(SessionPath, _warnings, ValidateSession, ValidateSessionStructure).ConfigureAwait(false) ?? new();
+                if (document.Version != 1) throw new UnsupportedSessionVersionException();
                 if (document.Torrents is null || document.Torrents.Count > 10000) throw new InvalidDataException("Недопустимый список загрузок в сессии.");
                 _engine = new ClientEngine(BuildEngineSettings(Settings), Factories.Default.WithPieceWriterCreator(
-                    maximumFiles => new GuardedPieceWriter(new DiskWriter(maximumFiles), ValidatePayloadAccess)));
+                    maximumFiles => new GuardedPieceWriter(new DiskWriter(maximumFiles), ValidatePayloadAccess, Path.Combine(_dataDirectory, "payload-ownership"))));
                 foreach (var saved in document.Torrents)
                 {
                     if (saved is null || string.IsNullOrWhiteSpace(saved.Id) || CopyEntries().Any(x => x.Saved.Id == saved.Id))
                     { _warnings.Add("Пропущена повреждённая или повторяющаяся запись сессии."); continue; }
-                    saved.Priorities ??= [];
+                    saved.Id = saved.Id.ToUpperInvariant();
                     var entry = new Entry(saved);
                     lock (_entriesLock) _entries.Add(entry);
                     try { await LoadManagerAsync(entry).ConfigureAwait(false); }
@@ -104,12 +116,20 @@ public sealed class TorrentService : ITorrentService
                     if (!Settings.ResumeOnStartup) saved.ShouldRun = false;
                 }
                 _initialized = true;
-                foreach (var entry in CopyEntries().Where(x => (x.Manager != null || x.PendingMagnet != null) && x.Error == null && x.Saved.ShouldRun))
+                foreach (var entry in CopyEntries().Where(x => x.Error == null))
                 {
-                    try { await StartEntryAsync(entry).ConfigureAwait(false); }
+                    try
+                    {
+                        // Resume maps are hints, not proof of the payload still present on
+                        // disk. Verify restored tasks, including paused tasks, before showing
+                        // their data as complete. This runs in the background so startup can
+                        // display progress and users can pause/remove a long verification.
+                        if (entry.Manager != null) await BeginVerificationAsync(entry).ConfigureAwait(false);
+                        else if (entry.PendingMagnet != null && entry.Saved.ShouldRun) await StartEntryAsync(entry).ConfigureAwait(false);
+                    }
                     catch (Exception ex) { entry.Error = ex.Message; _warnings.Add($"{entry.Saved.Name}: {ex.Message}"); }
                 }
-                _backgroundTasks.Add(CheckpointLoopAsync());
+                TrackBackgroundTask(CheckpointLoopAsync());
             }
             catch
             {
@@ -129,8 +149,7 @@ public sealed class TorrentService : ITorrentService
             var magnet = MagnetLink.Parse(source);
             return new(source, magnet.Name ?? magnet.InfoHashes.V1OrV2.ToHex(), magnet.Size ?? 0, true, []);
         }
-        TorrentInput.CheckMetadataFile(source);
-        var torrent = await Torrent.LoadAsync(source).ConfigureAwait(false);
+        var torrent = await TorrentInput.LoadMetadataAsync(source).ConfigureAwait(false);
         TorrentInput.ValidateMetadata(torrent);
         return new(source, torrent.Name, torrent.Size, false, torrent.Files.Select(x => new TorrentFilePreview(x.Path, x.Length)).ToArray());
     }
@@ -150,7 +169,7 @@ public sealed class TorrentService : ITorrentService
             string source = preview.Source;
             InfoHashes hashes;
             if (preview.IsMagnet) hashes = MagnetLink.Parse(source).InfoHashes;
-            else hashes = (await Torrent.LoadAsync(source).ConfigureAwait(false)).InfoHashes;
+            else hashes = (await TorrentInput.LoadMetadataAsync(source).ConfigureAwait(false)).InfoHashes;
             if (CopyEntries().Any(x => x.Saved.Id == hashes.V1?.ToHex() || x.Saved.Id == hashes.V2?.ToHex() ||
                 (x.Manager != null && HashesOverlap(x.Manager.InfoHashes, hashes)) ||
                 (x.PendingMagnet != null && HashesOverlap(x.PendingMagnet.InfoHashes, hashes))))
@@ -163,7 +182,7 @@ public sealed class TorrentService : ITorrentService
                 // Store our own immutable source: moving/deleting the original must not break resume.
                 if (!Path.GetFullPath(source).Equals(imported, StringComparison.OrdinalIgnoreCase))
                 {
-                    byte[] data = await File.ReadAllBytesAsync(source).ConfigureAwait(false);
+                    byte[] data = await TorrentInput.ReadMetadataAsync(source).ConfigureAwait(false);
                     if (data.Length > TorrentInput.MaximumMetadataBytes) throw new ArgumentException("Torrent-файл слишком велик.");
                     var stable = Torrent.Load(data);
                     TorrentInput.ValidateMetadata(stable);
@@ -178,7 +197,8 @@ public sealed class TorrentService : ITorrentService
             var entry = new Entry(new SavedTorrent
             {
                 Id = hashes.V1OrV2.ToHex(), Source = source, Name = preview.Name,
-                SaveDirectory = destination, ShouldRun = request.StartImmediately, Priorities = priorities
+                SaveDirectory = destination, ShouldRun = request.StartImmediately, Priorities = priorities,
+                AllowExistingFiles = request.AllowExistingFiles
             });
             lock (_entriesLock) _entries.Add(entry);
             try
@@ -225,8 +245,7 @@ public sealed class TorrentService : ITorrentService
             }
             source = cached;
         }
-        TorrentInput.CheckMetadataFile(source);
-        metadata = await Torrent.LoadAsync(source).ConfigureAwait(false);
+        metadata = await TorrentInput.LoadMetadataAsync(source).ConfigureAwait(false);
         TorrentInput.ValidateMetadata(metadata);
         var hashes = metadata.InfoHashes;
         if (!(hashes.V1?.ToHex() == entry.Saved.Id || hashes.V2?.ToHex() == entry.Saved.Id))
@@ -268,6 +287,7 @@ public sealed class TorrentService : ITorrentService
             }
         }
         entry.Saved.Name = manager.Name;
+        if (manager.Files.All(x => x.Priority == Priority.DoNotDownload)) entry.Saved.ShouldRun = false;
     }
 
     private async Task ObserveMetadataDownloadAsync(Entry entry, Task<ReadOnlyMemory<byte>> operation)
@@ -311,7 +331,18 @@ public sealed class TorrentService : ITorrentService
                     await SaveSessionAsync().ConfigureAwait(false);
                 }
             }
-            finally { _gate.Release(); }
+            finally
+            {
+                // A completed metadata Task owns its byte[] result. Once converted to
+                // a normal manager, do not retain up to 16 MiB for the life of the task.
+                if (entry.MetadataOperation == operation && operation.IsCompleted)
+                {
+                    entry.MetadataOperation = null;
+                    entry.MetadataCancellation?.Dispose();
+                    entry.MetadataCancellation = null;
+                }
+                _gate.Release();
+            }
         }
         catch (OperationCanceledException) { }
         catch (Exception ex)
@@ -373,15 +404,29 @@ public sealed class TorrentService : ITorrentService
 
     public async Task PauseAsync(string id)
     {
+        Task? metadataStop = null;
         await _gate.WaitAsync().ConfigureAwait(false);
         try
         {
             RequireReady(); var entry = FindEntry(id);
             entry.Saved.ShouldRun = false;
-            await StopEntryAsync(entry).ConfigureAwait(false);
+            entry.NeedsVerification = true;
+            if (entry.Manager == null && entry.MetadataCancellation != null)
+            {
+                // Cancel under the command gate, then wait for the temporary manager's
+                // bounded network cleanup outside it. Other tasks/settings remain usable.
+                await entry.MetadataCancellation.CancelAsync().ConfigureAwait(false);
+                metadataStop = entry.MetadataOperation;
+            }
+            else await StopEntryAsync(entry).ConfigureAwait(false);
             await SaveSessionAsync().ConfigureAwait(false);
         }
         finally { _gate.Release(); }
+        if (metadataStop != null)
+        {
+            try { await metadataStop.ConfigureAwait(false); }
+            catch (OperationCanceledException) { }
+        }
     }
 
     public async Task RecheckAsync(string id)
@@ -393,18 +438,43 @@ public sealed class TorrentService : ITorrentService
             if (entry.Manager?.HasMetadata != true) throw new InvalidOperationException("Сначала дождитесь получения списка файлов.");
             if (entry.HashOperation is { IsCompleted: false }) return;
             await StopEntryAsync(entry).ConfigureAwait(false);
-            // 3.0.2 keeps HashChecked=true across an explicit recheck unless it is reset.
-            // Without this, an interrupted check can write inconsistent fast-resume data.
-            await entry.Manager.SetNeedsHashCheckAsync().ConfigureAwait(false);
-            entry.Error = null;
-            entry.HashOperation = entry.Manager.HashCheckAsync(autoStart: false);
-            entry.Recheck = ObserveRecheckAsync(entry, entry.HashOperation);
-            _backgroundTasks.Add(entry.Recheck);
+            await BeginVerificationAsync(entry).ConfigureAwait(false);
         }
         finally { _gate.Release(); }
     }
 
-    private async Task ObserveRecheckAsync(Entry entry, Task hashOperation)
+    private async Task BeginVerificationAsync(Entry entry)
+    {
+        long epoch = ++entry.VerificationEpoch;
+        entry.VerifiedFingerprints = null;
+        entry.ResumeFingerprints = null;
+        await entry.Manager!.SetNeedsHashCheckAsync().ConfigureAwait(false);
+        entry.NeedsVerification = true;
+        entry.Error = null;
+        try
+        {
+            // Hashing the expected prefix alone would accept a file with an extra
+            // tail as complete. Do not silently truncate it or report it as ready.
+            foreach (var file in entry.Manager.Files.Where(x => x.Priority != Priority.DoNotDownload))
+            {
+                var info = new FileInfo(file.FullPath);
+                if (info.Exists && info.Length > file.Length)
+                    throw new IOException($"Файл {file.Path} длиннее файла раздачи. Он сохранён без изменений; выберите другую папку или перенесите его вручную.");
+            }
+            var beforeHash = PayloadFingerprint.Capture(entry.Manager.Files);
+            entry.HashOperation = entry.Manager.HashCheckAsync(autoStart: false);
+            entry.Recheck = ObserveRecheckAsync(entry, entry.HashOperation, epoch, beforeHash);
+            TrackBackgroundTask(entry.Recheck);
+        }
+        catch (Exception ex)
+        {
+            entry.Error = ex.Message;
+            entry.Saved.ShouldRun = false;
+            throw;
+        }
+    }
+
+    private async Task ObserveRecheckAsync(Entry entry, Task hashOperation, long epoch, Dictionary<string, PayloadFingerprint>? beforeHash)
     {
         try
         {
@@ -412,8 +482,18 @@ public sealed class TorrentService : ITorrentService
             await _gate.WaitAsync(_lifetime.Token).ConfigureAwait(false);
             try
             {
-                if (_stopping || entry.Removed || entry.HashOperation != hashOperation) return;
-                if (entry.Saved.ShouldRun && entry.Manager!.State != TorrentState.Error) await StartEntryAsync(entry).ConfigureAwait(false);
+                if (_stopping || entry.Removed || entry.HashOperation != hashOperation || entry.VerificationEpoch != epoch) return;
+                entry.NeedsVerification = !entry.Manager!.HashChecked;
+                var afterHash = PayloadFingerprint.Capture(entry.Manager.Files);
+                // Only a stable view around a real hash check can become a fast
+                // resume hint. Taking a new snapshot at Stop would bless unrelated
+                // modifications made while a task was active.
+                if (entry.Manager.HashChecked && PayloadFingerprint.Matches(beforeHash, afterHash))
+                {
+                    entry.VerifiedFingerprints = afterHash;
+                    entry.VerifiedReceivedBytes = entry.Manager.Monitor.DataBytesReceived;
+                }
+                if (entry.Saved.ShouldRun && entry.Manager.State != TorrentState.Error) await StartEntryAsync(entry).ConfigureAwait(false);
                 await SaveSessionAsync().ConfigureAwait(false);
             }
             finally { _gate.Release(); }
@@ -435,6 +515,9 @@ public sealed class TorrentService : ITorrentService
             catch { entry.Removed = false; entry.Saved.ShouldRun = false; throw; }
             if (entry.Manager != null) await _engine!.RemoveAsync(entry.Manager).ConfigureAwait(false);
             ReleasePaths(entry);
+            entry.MetadataCancellation?.Dispose();
+            entry.MetadataCancellation = null;
+            entry.MetadataOperation = null;
             lock (_entriesLock) _entries.Remove(entry);
             // Source metadata and resume cache are harmless and intentionally retained. Payload is never deleted.
         }
@@ -471,7 +554,7 @@ public sealed class TorrentService : ITorrentService
             RequireReady();
             var old = Settings;
             await _engine!.UpdateSettingsAsync(BuildEngineSettings(settings)).ConfigureAwait(false);
-            try { await AtomicJsonFile.WriteAsync(SettingsPath, settings).ConfigureAwait(false); }
+            try { await AtomicJsonFile.WriteAsync(SettingsPath, settings, ValidateStoredSettings).ConfigureAwait(false); }
             catch { await _engine.UpdateSettingsAsync(BuildEngineSettings(old)).ConfigureAwait(false); throw; }
             Settings = settings;
             foreach (var entry in CopyEntries().Where(x => x.Manager != null))
@@ -501,22 +584,78 @@ public sealed class TorrentService : ITorrentService
             if (entry.MetadataOperation is { IsCompleted: false })
             {
                 if (!entry.MetadataCancellation!.IsCancellationRequested) return;
-                try { await entry.MetadataOperation.ConfigureAwait(false); }
-                catch (OperationCanceledException) { }
+                // A quick Resume after Pause must not wait for the old metadata
+                // manager while holding the global command gate, nor register a
+                // duplicate manager before that cleanup finishes.
+                if (entry.MetadataRestart is not { IsCompleted: false })
+                {
+                    entry.MetadataRestart = RestartMetadataAfterCleanupAsync(entry, entry.MetadataOperation);
+                    TrackBackgroundTask(entry.MetadataRestart);
+                }
+                return;
             }
             entry.MetadataCancellation?.Dispose();
             entry.MetadataCancellation = CancellationTokenSource.CreateLinkedTokenSource(_lifetime.Token);
-            entry.MetadataOperation = _engine!.DownloadMetadataAsync(entry.PendingMagnet, entry.MetadataCancellation.Token);
-            _backgroundTasks.Add(ObserveMetadataDownloadAsync(entry, entry.MetadataOperation));
+            entry.MetadataOperation = DownloadMetadataBoundedAsync(_engine!, entry.PendingMagnet, entry.MetadataCancellation.Token);
+            TrackBackgroundTask(ObserveMetadataDownloadAsync(entry, entry.MetadataOperation));
             return;
         }
         if (entry.Manager.State is TorrentState.Starting or TorrentState.Downloading or TorrentState.Seeding or TorrentState.Metadata or TorrentState.FetchingHashes or TorrentState.Hashing) return;
         if (entry.Manager.State == TorrentState.Error) await StopEntryAsync(entry).ConfigureAwait(false);
+        if (entry.ResumeFingerprints != null && !PayloadFingerprint.Matches(entry.ResumeFingerprints, PayloadFingerprint.Capture(entry.Manager.Files)))
+            entry.NeedsVerification = true;
+        entry.ResumeFingerprints = null;
+        if (entry.NeedsVerification)
+        {
+            await BeginVerificationAsync(entry).ConfigureAwait(false);
+            return;
+        }
         await entry.Manager.StartAsync().ConfigureAwait(false);
+    }
+
+    private async Task<ReadOnlyMemory<byte>> DownloadMetadataBoundedAsync(ClientEngine engine, MagnetLink magnet, CancellationToken cancellationToken)
+    {
+        // A metadata result may be as large as 16 MiB. Keep the active receive
+        // budget bounded; queued cancellation does not even create a manager.
+        await _metadataSlots.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try { return await engine.DownloadMetadataAsync(magnet, cancellationToken, TimeSpan.FromSeconds(2)).ConfigureAwait(false); }
+        finally { _metadataSlots.Release(); }
+    }
+
+    private async Task RestartMetadataAfterCleanupAsync(Entry entry, Task previous)
+    {
+        try
+        {
+            try { await previous.ConfigureAwait(false); }
+            catch (OperationCanceledException) { }
+            await _gate.WaitAsync(_lifetime.Token).ConfigureAwait(false);
+            try
+            {
+                if (!_stopping && !entry.Removed && entry.Saved.ShouldRun && entry.Manager == null &&
+                    entry.PendingMagnet != null && (entry.MetadataOperation == previous || entry.MetadataOperation == null))
+                    await StartEntryAsync(entry).ConfigureAwait(false);
+            }
+            finally { _gate.Release(); }
+        }
+        catch (OperationCanceledException) when (_lifetime.IsCancellationRequested) { }
+        catch (Exception ex) { entry.Error = ex.Message; Log(ex); }
+    }
+
+    private void TrackBackgroundTask(Task task)
+    {
+        lock (_backgroundTasksLock) _backgroundTasks.Add(task);
+        _ = task.ContinueWith(completed =>
+        {
+            lock (_backgroundTasksLock) _backgroundTasks.Remove(completed);
+            if (completed.IsFaulted) Log(completed.Exception!);
+        }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
     }
 
     private static async Task StopEntryAsync(Entry entry)
     {
+        ++entry.VerificationEpoch;
+        entry.NeedsVerification = true;
+        entry.ResumeFingerprints = null;
         if (entry.Manager == null && entry.MetadataCancellation != null)
         {
             await entry.MetadataCancellation.CancelAsync().ConfigureAwait(false);
@@ -525,17 +664,39 @@ public sealed class TorrentService : ITorrentService
                 catch (OperationCanceledException) { }
                 catch (Exception ex) { entry.Error ??= ex.Message; }
         }
-        if (entry.Manager != null && (entry.Manager.State != TorrentState.Stopped || entry.HashOperation is { IsCompleted: false }))
+        if (entry.Manager != null)
         {
-            // MonoTorrent resets its transfer monitor during Stop. Preserve the observed
-            // payload total without counting it twice in states which do not reset it.
-            long before = entry.Manager.Monitor.DataBytesSent;
-            await entry.Manager.StopAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
-            // Always enqueue Stop after a newly queued hash check, even before its state
-            // becomes Hashing. Await only the raw engine task, never the gated observer.
-            if (entry.HashOperation != null) await entry.HashOperation.ConfigureAwait(false);
-            long after = entry.Manager.Monitor.DataBytesSent;
-            if (after < before) entry.UploadBaseline += before - after;
+            var manager = entry.Manager;
+            var beforeStop = PayloadFingerprint.Capture(manager.Files);
+            long receivedBeforeStop = manager.Monitor.DataBytesReceived;
+            bool mayKeepVerifiedState = manager.State != TorrentState.Error && manager.HashChecked &&
+                receivedBeforeStop == entry.VerifiedReceivedBytes &&
+                PayloadFingerprint.Matches(entry.VerifiedFingerprints, beforeStop);
+            if (manager.State != TorrentState.Stopped || entry.HashOperation is { IsCompleted: false })
+            {
+                // MonoTorrent resets its transfer monitor during Stop. Preserve the
+                // payload upload total; do not treat newly received payload as a
+                // trusted fingerprint simply because the task has now stopped.
+                long monitorGeneration = manager.StopMonitorGeneration;
+                await manager.StopAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+                if (entry.HashOperation != null) await entry.HashOperation.ConfigureAwait(false);
+                if (manager.StopMonitorGeneration != monitorGeneration)
+                {
+                    // These values were captured on the engine loop before Reset,
+                    // including data arriving between our pre-stop sample and Stop.
+                    entry.UploadBaseline += manager.LastStopDataBytesSent;
+                    if (manager.LastStopDataBytesReceived != receivedBeforeStop) mayKeepVerifiedState = false;
+                }
+            }
+            var afterStop = PayloadFingerprint.Capture(manager.Files);
+            if (mayKeepVerifiedState && manager.HashChecked && PayloadFingerprint.Matches(beforeStop, afterStop))
+            {
+                // The same verified files survived the active period and shutdown.
+                // Resume checks this exact snapshot again before using the fast path.
+                entry.ResumeFingerprints = afterStop;
+                entry.VerifiedReceivedBytes = manager.Monitor.DataBytesReceived;
+                entry.NeedsVerification = false;
+            }
         }
     }
 
@@ -544,7 +705,7 @@ public sealed class TorrentService : ITorrentService
         var entries = CopyEntries().Where(x => !x.Removed).ToArray();
         foreach (var entry in entries)
             if (entry.Manager != null) entry.Saved.UploadedBytes = entry.UploadBaseline + entry.Manager.Monitor.DataBytesSent;
-        await AtomicJsonFile.WriteAsync(SessionPath, new SessionDocument { Torrents = entries.Select(x => x.Saved).ToList() }).ConfigureAwait(false);
+        await AtomicJsonFile.WriteAsync(SessionPath, new SessionDocument { Torrents = entries.Select(x => x.Saved).ToList() }, ValidateSession, ValidateSessionStructure).ConfigureAwait(false);
     }
 
     private async Task CheckpointLoopAsync()
@@ -589,7 +750,10 @@ public sealed class TorrentService : ITorrentService
             _disposed = true;
         }
         finally { _gate.Release(); }
-        await Task.WhenAll(_backgroundTasks).ConfigureAwait(false);
+        Task[] remaining;
+        lock (_backgroundTasksLock) remaining = _backgroundTasks.ToArray();
+        await Task.WhenAll(remaining).ConfigureAwait(false);
+        foreach (var entry in CopyEntries()) entry.MetadataCancellation?.Dispose();
         if (failure != null) throw new IOException("Не удалось полностью сохранить сессию. Скачанные файлы остаются на диске; при запуске может потребоваться перепроверка.", failure);
     }
 
@@ -599,7 +763,10 @@ public sealed class TorrentService : ITorrentService
     {
         CacheDirectory = Path.Combine(_dataDirectory, "cache"),
         AutoSaveLoadDhtCache = !_offlineMode,
-        AutoSaveLoadFastResume = true,
+        // Cached bitfields do not validate sizes, timestamps or bytes in 3.0.2.
+        // Rebuild them from selected payload on process start. In-process fast
+        // resume is allowed only for unchanged, previously verified fingerprints.
+        AutoSaveLoadFastResume = false,
         AutoSaveLoadMagnetLinkMetadata = true,
         FastResumeMode = FastResumeMode.Accurate,
         AllowLocalPeerDiscovery = !_offlineMode,
@@ -617,6 +784,46 @@ public sealed class TorrentService : ITorrentService
         },
         UsePartialFiles = true
     }.ToSettings();
+
+    private static void ValidateSessionStructure(JsonElement document)
+    {
+        if (document.ValueKind != JsonValueKind.Object || !document.TryGetProperty("Version", out var version) || version.ValueKind != JsonValueKind.Number || !version.TryGetInt32(out int number))
+            throw new InvalidDataException("В сессии отсутствует допустимая версия формата.");
+        // Inspect the version before deserializing required fields. A future schema
+        // may use entirely different fields and must never trigger a downgrade.
+        if (number > 1) throw new UnsupportedSessionVersionException();
+        if (number != 1) throw new InvalidDataException("Недопустимая версия формата сессии.");
+        if (!document.TryGetProperty("Torrents", out var torrents) || torrents.ValueKind != JsonValueKind.Array)
+            throw new InvalidDataException("В сессии отсутствует допустимый список загрузок.");
+    }
+
+    private static void ValidateSession(SessionDocument document)
+    {
+        if (document.Version > 1) throw new UnsupportedSessionVersionException();
+        if (document.Version != 1 || document.Torrents is null || document.Torrents.Count > 10000)
+            throw new InvalidDataException("Недопустимый список загрузок в сессии.");
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var saved in document.Torrents)
+        {
+            if (saved is null || saved.Id is null || saved.Id.Length is not (40 or 64) || !saved.Id.All(Uri.IsHexDigit) || !ids.Add(saved.Id))
+                throw new InvalidDataException("Сессия содержит повреждённый или повторяющийся хеш раздачи.");
+            if (saved.Name is null || saved.Source is null || saved.SaveDirectory is null || saved.Priorities is null || saved.UploadedBytes < 0 ||
+                saved.Priorities.Values.Any(x => !Enum.IsDefined(x)))
+                throw new InvalidDataException("Сессия содержит недопустимые поля загрузки.");
+            try
+            {
+                _ = TorrentInput.Normalize(saved.Source);
+                _ = TorrentInput.NormalizeDirectory(saved.SaveDirectory);
+            }
+            catch (ArgumentException ex) { throw new InvalidDataException("Сессия содержит недопустимый источник или папку загрузки.", ex); }
+        }
+    }
+
+    private static void ValidateStoredSettings(AppSettings settings)
+    {
+        try { _ = ValidateSettings(settings); }
+        catch (ArgumentException ex) { throw new InvalidDataException("Недопустимые сохранённые настройки.", ex); }
+    }
 
     private static AppSettings ValidateSettings(AppSettings settings)
     {
@@ -641,6 +848,8 @@ public sealed class TorrentService : ITorrentService
 
     private static void RejectLinkedDescendants(string root, string path)
     {
+        if ((File.Exists(root) || Directory.Exists(root)) && (File.GetAttributes(root) & FileAttributes.ReparsePoint) != 0)
+            throw new IOException("Папка загрузки является символической ссылкой. Выберите реальную папку.");
         string relative = Path.GetRelativePath(root, path);
         string current = root;
         foreach (string segment in relative.Split(Path.DirectorySeparatorChar))
@@ -682,7 +891,7 @@ public sealed class TorrentService : ITorrentService
         }
     }
 
-    private void ValidatePayloadAccess(ITorrentManagerFile file, string? targetPath)
+    private PayloadPermission ValidatePayloadAccess(ITorrentManagerFile file, string? targetPath)
     {
         lock (_pathLock)
         {
@@ -706,6 +915,9 @@ public sealed class TorrentService : ITorrentService
             string path = Path.GetFullPath(targetPath ?? file.FullPath);
             if (!_reservedPaths.TryGetValue(path, out var reserved) || !ReferenceEquals(reserved.File, file))
                 throw new IOException("Путь файла не принадлежит этой раздаче.");
+            RejectLinkedDescendants(reserved.Owner.Saved.SaveDirectory, path);
+            if (targetPath != null) RejectLinkedDescendants(reserved.Owner.Saved.SaveDirectory, Path.GetFullPath(file.FullPath));
+            return new PayloadPermission(reserved.Owner.Saved.Id, reserved.Owner.Saved.AllowExistingFiles);
         }
     }
 

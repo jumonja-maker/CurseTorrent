@@ -27,6 +27,7 @@ public partial class MainWindow : Window
     private readonly DispatcherTimer _timer;
     private readonly SemaphoreSlim _sourceQueue = new(1, 1);
     private readonly ICollectionView _view;
+    private readonly ICollectionView _filesView;
     private Forms.NotifyIcon? _tray;
     private System.Drawing.Icon? _trayIcon;
     private bool _busy;
@@ -43,11 +44,19 @@ public partial class MainWindow : Window
         _service = service;
         _smokeTest = smokeTest;
         InitializeComponent();
+        VersionLabel.Text = $"CurseTorrent {typeof(App).Assembly.GetName().Version?.ToString(3) ?? "—"}";
         WindowTheme.Attach(this);
         _view = CollectionViewSource.GetDefaultView(_rows);
         _view.Filter = MatchesFilter;
         TorrentGrid.ItemsSource = _view;
-        FilesGrid.ItemsSource = _fileRows;
+        _filesView = CollectionViewSource.GetDefaultView(_fileRows);
+        if (_filesView is ICollectionViewLiveShaping live && live.CanChangeLiveSorting)
+        {
+            foreach (string property in new[] { nameof(TorrentFileRow.Path), nameof(TorrentFileRow.SizeBytes), nameof(TorrentFileRow.Progress), nameof(TorrentFileRow.Priority) })
+                live.LiveSortingProperties.Add(property);
+            live.IsLiveSorting = true;
+        }
+        FilesGrid.ItemsSource = _filesView;
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += (_, _) => Refresh();
         Loaded += (_, _) => { Refresh(); _timer.Start(); };
@@ -87,8 +96,9 @@ public partial class MainWindow : Window
     public void ShowStartupWarnings()
     {
         if (_service.StartupWarnings.Count == 0) return;
+        App.WriteLog("Сообщения при запуске:\n" + string.Join("\n\n", _service.StartupWarnings));
         ShowAndActivate();
-        MessageBox.Show(this, string.Join("\n\n", _service.StartupWarnings), "Сообщения при запуске", MessageBoxButton.OK, MessageBoxImage.Warning);
+        MessageBox.Show(this, DialogText.StartupSummary(_service.StartupWarnings), "Сообщения при запуске", MessageBoxButton.OK, MessageBoxImage.Warning);
     }
 
     public async Task QueueSourcesAsync(IEnumerable<string> sources)
@@ -171,7 +181,11 @@ public partial class MainWindow : Window
             UpdateDetails();
             UpdateButtons();
             if (DateTime.UtcNow > _statusUntil && !_busy)
-                StatusLabel.Text = $"Готово   ·   Порт {_service.Settings.ListenPort}   ·   Лимит ↓ {Limit(_service.Settings.DownloadLimitKiB)} / ↑ {Limit(_service.Settings.UploadLimitKiB)}";
+            {
+                string port = _service.Settings.ListenPort == 0 ? "Порт автоматически" : $"Порт {_service.Settings.ListenPort}";
+                StatusLabel.Text = $"Готово   ·   {port}   ·   Лимит ↓ {Limit(_service.Settings.DownloadLimitKiB)} / ↑ {Limit(_service.Settings.UploadLimitKiB)}";
+                StatusLabel.ToolTip = StatusLabel.Text;
+            }
         }
         catch (Exception exception)
         {
@@ -242,7 +256,7 @@ public partial class MainWindow : Window
         {
             App.WriteLog(exception);
             SetStatus("Ошибка: " + exception.Message);
-            MessageBox.Show(this, exception.Message, "CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, DialogText.Summary(exception.Message), "CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         finally { _busy = false; Refresh(); UpdateButtons(); }
     }
@@ -276,7 +290,7 @@ public partial class MainWindow : Window
     private async void OnRemove(object sender, RoutedEventArgs e)
     {
         if (TorrentGrid.SelectedItem is not TorrentRow row) return;
-        if (MessageBox.Show(this, $"Убрать «{row.Name}» из списка?\n\nЗагруженные файлы останутся на диске. Раздача будет остановлена.", "Удалить торрент из списка", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+        if (MessageBox.Show(this, $"Убрать «{DialogText.SingleLine(row.Name)}» из списка?\n\nЗагруженные файлы останутся на диске. Раздача будет остановлена.", "Удалить торрент из списка", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             await RunOperationAsync(() => _service.RemoveAsync(row.Id), "Удаление из списка…");
     }
     private void OnOpenFolder(object sender, RoutedEventArgs e)
@@ -287,7 +301,7 @@ public partial class MainWindow : Window
             if (!Directory.Exists(row.Snapshot.SaveDirectory)) throw new DirectoryNotFoundException("Папка загрузки пока не создана или недоступна.");
             Process.Start(new ProcessStartInfo("explorer.exe") { UseShellExecute = true, Arguments = "\"" + row.Snapshot.SaveDirectory + "\"" });
         }
-        catch (Exception exception) { MessageBox.Show(this, exception.Message, "Не удалось открыть папку", MessageBoxButton.OK, MessageBoxImage.Warning); }
+        catch (Exception exception) { App.WriteLog(exception); MessageBox.Show(this, DialogText.Summary(exception.Message), "Не удалось открыть папку", MessageBoxButton.OK, MessageBoxImage.Warning); }
     }
     private async void OnSettings(object sender, RoutedEventArgs e)
     {
@@ -361,7 +375,7 @@ public partial class MainWindow : Window
         catch (Exception exception)
         {
             App.WriteLog(exception);
-            if (!_smokeTest) MessageBox.Show(this, "Не удалось полностью сохранить состояние загрузок. При следующем запуске может потребоваться проверка файлов.\n\n" + exception.Message, "Завершение CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!_smokeTest) MessageBox.Show(this, "Не удалось полностью сохранить состояние загрузок. При следующем запуске может потребоваться проверка файлов.\n\n" + DialogText.Summary(exception.Message), "Завершение CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         finally
         {

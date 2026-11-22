@@ -9,9 +9,16 @@ internal static class WindowTheme
 {
     [DllImport("dwmapi.dll", PreserveSig = true)]
     private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
-    internal static void Attach(Window window) => window.SourceInitialized += (_, _) =>
+    internal static void Attach(Window window)
     {
-        int enabled = 1;
+        WindowPlacement.Attach(window);
+        window.SourceInitialized += (_, _) => ApplyNativeTheme(window);
+    }
+
+    internal static void ApplyNativeTheme(Window window)
+    {
+        if (!window.IsInitialized) return;
+        int enabled = SystemParameters.HighContrast ? 0 : 1;
         _ = DwmSetWindowAttribute(new WindowInteropHelper(window).Handle, 20, ref enabled, sizeof(int));
-    };
+    }
 }

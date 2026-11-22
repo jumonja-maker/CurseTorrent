@@ -73,6 +73,8 @@ public sealed class TorrentFileRow(TorrentFileSnapshot snapshot) : NotifyModel
 {
     private TorrentFileSnapshot _snapshot = snapshot;
     public string Path => _snapshot.Path;
+    public long SizeBytes => _snapshot.SizeBytes;
+    public double Progress => _snapshot.Progress;
     public string Size => Display.Bytes(_snapshot.SizeBytes);
     public string ProgressText => $"{_snapshot.Progress:0.0}%";
     public FilePriority Priority

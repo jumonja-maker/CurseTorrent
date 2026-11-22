@@ -16,7 +16,7 @@ public partial class MagnetWindow : Window
     {
         string input = MagnetBox.Text.Trim();
         if (!input.StartsWith("magnet:?", StringComparison.OrdinalIgnoreCase))
-        { ErrorLabel.Text = "Ссылка должна начинаться с magnet:?."; return; }
+        { ErrorLabel.Text = "Ссылка должна начинаться с magnet:?."; ErrorLabel.BringIntoView(); return; }
         Magnet = input;
         DialogResult = true;
     }

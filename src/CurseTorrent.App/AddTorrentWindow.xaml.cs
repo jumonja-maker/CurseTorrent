@@ -30,6 +30,7 @@ public partial class AddTorrentWindow : Window
             _files.Add(row);
         }
         FilesGrid.ItemsSource = _files;
+        SizeChanged += (_, _) => FilesPanel.Height = Math.Clamp(ActualHeight - 520, 100, 320);
         if (preview.IsMagnet)
         {
             FilesGrid.Visibility = SelectionControls.Visibility = Visibility.Collapsed;
@@ -65,10 +66,11 @@ public partial class AddTorrentWindow : Window
             directory = Path.GetFullPath(directory);
             if (!_preview.IsMagnet && !_files.Any(file => file.IsSelected)) throw new ArgumentException("Выберите хотя бы один файл для скачивания.");
             var priorities = _preview.IsMagnet ? null : _files.ToDictionary(file => file.Path, file => file.IsSelected ? FilePriority.Normal : FilePriority.Skip, StringComparer.Ordinal);
-            Request = new AddTorrentRequest(_preview.Source, directory, StartCheckBox.IsChecked == true, priorities);
+            Request = new AddTorrentRequest(_preview.Source, directory, StartCheckBox.IsChecked == true, priorities,
+                AllowExistingFiles: AllowExistingFilesCheck.IsChecked == true);
             DialogResult = true;
         }
         catch (Exception exception) when (exception is ArgumentException or NotSupportedException or PathTooLongException)
-        { ErrorLabel.Text = exception.Message; }
+        { ErrorLabel.Text = exception.Message; ErrorLabel.BringIntoView(); }
     }
 }

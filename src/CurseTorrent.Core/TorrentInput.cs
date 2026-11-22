@@ -33,6 +33,20 @@ internal static class TorrentInput
             throw new ArgumentException("Размер .torrent-файла должен быть от 1 байта до 16 МиБ.");
     }
 
+    public static async Task<byte[]> ReadMetadataAsync(string path)
+    {
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.Asynchronous);
+        if (stream.Length <= 0 || stream.Length > MaximumMetadataBytes)
+            throw new ArgumentException("Размер .torrent-файла должен быть от 1 байта до 16 МиБ.");
+        byte[] bytes = new byte[checked((int)stream.Length)];
+        await stream.ReadExactlyAsync(bytes).ConfigureAwait(false);
+        if (await stream.ReadAsync(new byte[1]).ConfigureAwait(false) != 0)
+            throw new IOException("Torrent-файл изменился во время чтения. Повторите попытку.");
+        return bytes;
+    }
+
+    public static async Task<Torrent> LoadMetadataAsync(string path) => Torrent.Load(await ReadMetadataAsync(path).ConfigureAwait(false));
+
     public static void ValidateMetadata(Torrent torrent)
     {
         ValidateRelativePath(torrent.Name);
@@ -43,6 +57,16 @@ internal static class TorrentInput
             if (!paths.Add(file.Path.Replace('\\', '/')))
                 throw new ArgumentException("Раздача содержит совпадающие имена файлов для Windows.");
         }
+        foreach (string path in paths)
+        {
+            int slash = path.IndexOf('/');
+            while (slash >= 0)
+            {
+                if (paths.Contains(path[..slash]))
+                    throw new ArgumentException("Раздача использует одно имя и как файл, и как папку.");
+                slash = path.IndexOf('/', slash + 1);
+            }
+        }
     }
 
     private static void ValidateRelativePath(string path)
@@ -51,12 +75,12 @@ internal static class TorrentInput
             throw new ArgumentException("Раздача содержит недопустимый путь к файлу.");
         foreach (string segment in path.Split(['/', '\\']))
         {
-            if (segment.Length == 0 || segment is "." or ".." || segment.EndsWith('.') || segment.EndsWith(' ') ||
+            if (segment.Length == 0 || segment.Length > 255 || segment is "." or ".." || segment.EndsWith('.') || segment.EndsWith(' ') ||
                 segment.Any(c => c < 32 || "<>:\"|?*".Contains(c)))
                 throw new ArgumentException($"Имя файла не поддерживается Windows: {path}");
             string stem = segment.Split('.')[0].ToUpperInvariant();
             if (stem is "CON" or "PRN" or "AUX" or "NUL" ||
-                (stem.Length == 4 && (stem.StartsWith("COM") || stem.StartsWith("LPT")) && stem[3] is >= '1' and <= '9'))
+                (stem.Length == 4 && (stem.StartsWith("COM") || stem.StartsWith("LPT")) && (stem[3] is >= '1' and <= '9' or '¹' or '²' or '³')))
                 throw new ArgumentException($"Зарезервированное имя файла Windows: {path}");
         }
     }

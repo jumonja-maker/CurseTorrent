@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "ReusableTasks": {
+        "type": "Transitive",
+        "resolved": "4.0.0",
+        "contentHash": "6EKzscjq+Q+uxD0N5GWUBO2N34cuDiJ08ZxRs1lqS0Hwvnjp6AgimUIX/8dqIxRZbPOG4gcikTMo+PM4D9CfaQ=="
+      },
+      "monotorrent": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.BEncoding": "[3.0.2-cursetorrent.1, )",
+          "ReusableTasks": "[4.0.0, )"
+        }
+      },
+      "monotorrent.bencoding": {
+        "type": "Project"
+      }
+    },
+    "net10.0/win-x64": {}
+  }
+}

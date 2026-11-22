@@ -60,16 +60,17 @@ public partial class SettingsWindow : Window
             DialogResult = true;
         }
         catch (Exception exception) when (exception is ArgumentException or NotSupportedException or PathTooLongException)
-        { ErrorLabel.Text = exception.Message; }
+        { ShowError(exception); }
     }
     private void OnRegister(object sender, RoutedEventArgs e)
     {
         try { FileAssociations.Register(); RegistrationLabel.Text = "Зарегистрировано. Теперь выберите CurseTorrent в «Приложениях по умолчанию»."; }
-        catch (Exception exception) { ErrorLabel.Text = exception.Message; }
+        catch (Exception exception) { ShowError(exception); }
     }
     private void OnDefaultApps(object sender, RoutedEventArgs e)
     {
         try { Process.Start(new ProcessStartInfo("ms-settings:defaultapps") { UseShellExecute = true }); }
-        catch (Exception exception) { ErrorLabel.Text = exception.Message; }
+        catch (Exception exception) { ShowError(exception); }
     }
+    private void ShowError(Exception exception) { ErrorLabel.Text = exception.Message; ErrorLabel.BringIntoView(); }
 }

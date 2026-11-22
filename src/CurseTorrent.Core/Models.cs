@@ -17,7 +17,7 @@ public sealed record AppSettings
 
 public sealed record TorrentFilePreview(string Path, long SizeBytes);
 public sealed record TorrentPreview(string Source, string Name, long SizeBytes, bool IsMagnet, IReadOnlyList<TorrentFilePreview> Files);
-public sealed record AddTorrentRequest(string Source, string SaveDirectory, bool StartImmediately = true, IReadOnlyDictionary<string, FilePriority>? FilePriorities = null);
+public sealed record AddTorrentRequest(string Source, string SaveDirectory, bool StartImmediately = true, IReadOnlyDictionary<string, FilePriority>? FilePriorities = null, bool AllowExistingFiles = false);
 public sealed record TorrentFileSnapshot(string Path, long SizeBytes, double Progress, FilePriority Priority);
 public sealed record TorrentSnapshot(
     string Id, string Name, string SaveDirectory, DownloadState State, double Progress,

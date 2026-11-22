@@ -25,6 +25,7 @@ public partial class App : System.Windows.Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        ThemeManager.Initialize();
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
         CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("ru-RU");
         _smokeTest = e.Args.Contains("--smoke-test", StringComparer.Ordinal);
@@ -59,7 +60,7 @@ public partial class App : System.Windows.Application
         catch (Exception exception)
         {
             WriteLog(exception);
-            if (!_smokeTest) MessageBox.Show("Не удалось запустить CurseTorrent.\n\n" + exception.Message + "\n\nЕсли приложение уже запущено, откройте его через значок в трее.", "CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (!_smokeTest) MessageBox.Show("Не удалось запустить CurseTorrent.\n\n" + DialogText.Summary(exception.Message) + "\n\nЕсли приложение уже запущено, откройте его через значок в трее.", "CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown(1);
         }
     }
@@ -130,9 +131,10 @@ public partial class App : System.Windows.Application
 
     private static void VerifyWindowTheme(Window window)
     {
+        Color expected = SystemParameters.HighContrast ? SystemColors.WindowColor : Color.FromRgb(0x10, 0x12, 0x16);
         if (window.Background is not SolidColorBrush background ||
-            background.Color != Color.FromRgb(0x10, 0x12, 0x16) || background.Opacity != 1)
-            throw new InvalidOperationException($"Dark theme was not applied to {window.GetType().Name}.");
+            background.Color != expected || background.Opacity != 1)
+            throw new InvalidOperationException($"The active theme was not applied to {window.GetType().Name}.");
     }
 
     private void OnDispatcherException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -140,7 +142,7 @@ public partial class App : System.Windows.Application
         WriteLog(e.Exception);
         e.Handled = true;
         if (_smokeTest) { Shutdown(1); return; }
-        MessageBox.Show("Не удалось выполнить действие.\n\n" + e.Exception.Message, "CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show("Не удалось выполнить действие.\n\n" + DialogText.Summary(e.Exception.Message), "CurseTorrent", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -149,7 +151,9 @@ public partial class App : System.Windows.Application
         base.OnExit(e);
     }
 
-    internal static void WriteLog(Exception exception)
+    internal static void WriteLog(Exception exception) => WriteLog(exception.ToString());
+
+    internal static void WriteLog(string details)
     {
         try
         {
@@ -159,7 +163,7 @@ public partial class App : System.Windows.Application
             lock (LogLock)
             {
                 if (File.Exists(path) && new FileInfo(path).Length > 2 * 1024 * 1024) File.Move(path, path + ".previous", true);
-                File.AppendAllText(path, $"{DateTimeOffset.Now:O}\n{exception}\n\n", Encoding.UTF8);
+                File.AppendAllText(path, $"{DateTimeOffset.Now:O}\n{details}\n\n", Encoding.UTF8);
             }
         }
         catch (Exception) { /* A logging failure must never replace the original error. */ }

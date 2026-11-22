@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "Mono.Nat": {
+        "type": "Transitive",
+        "resolved": "3.0.0",
+        "contentHash": "LgRC8/8plJfvr1nCPmyHNIwP4fs346doMA/UVDZvFN0RfGJdyD2uS7Dl1AydxjVLrIvad8ghozI0vYFWcfPeYQ=="
+      },
+      "ReusableTasks": {
+        "type": "Transitive",
+        "resolved": "4.0.0",
+        "contentHash": "6EKzscjq+Q+uxD0N5GWUBO2N34cuDiJ08ZxRs1lqS0Hwvnjp6AgimUIX/8dqIxRZbPOG4gcikTMo+PM4D9CfaQ=="
+      },
+      "monotorrent": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.BEncoding": "[3.0.2-cursetorrent.1, )",
+          "ReusableTasks": "[4.0.0, )"
+        }
+      },
+      "monotorrent.bencoding": {
+        "type": "Project"
+      },
+      "monotorrent.connections": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.dht": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.messages": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.piecepicking": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.piecewriter": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.portforwarding": {
+        "type": "Project",
+        "dependencies": {
+          "Mono.Nat": "[3.0.0, )",
+          "MonoTorrent": "[3.0.2-cursetorrent.1, )"
+        }
+      },
+      "monotorrent.trackers": {
+        "type": "Project",
+        "dependencies": {
+          "MonoTorrent.Messages": "[3.0.2-cursetorrent.1, )"
+        }
+      }
+    },
+    "net10.0/win-x64": {}
+  }
+}
