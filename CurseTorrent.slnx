@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CurseTorrent.Core/CurseTorrent.Core.csproj" />
+    <Project Path="src/CurseTorrent.App/CurseTorrent.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CurseTorrent.Tests/CurseTorrent.Tests.csproj" />
+  </Folder>
+</Solution>

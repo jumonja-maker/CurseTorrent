@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Authors>CurseTorrent contributors</Authors>
+    <Company>CurseTorrent</Company>
+    <Product>CurseTorrent</Product>
+    <Copyright>Copyright © 2026 CurseTorrent contributors</Copyright>
+    <Deterministic>true</Deterministic>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+</Project>
