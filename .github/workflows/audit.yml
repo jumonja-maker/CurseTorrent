@@ -43,10 +43,12 @@ jobs:
         run: |
           dotnet build audit/core/CoreAudit.csproj -c Release
           if ($LASTEXITCODE -ne 0) { throw 'Core audit build failed' }
+          $failures = @()
           foreach ($mode in @('changed-payload', 'session', 'save-failure', 'transitions', 'metadata-stop')) {
             dotnet run --project audit/core/CoreAudit.csproj -c Release --no-build -- $mode
-            if ($LASTEXITCODE -ne 0) { throw "Core audit could not complete: $mode" }
+            if ($LASTEXITCODE -ne 0) { $failures += $mode }
           }
+          if ($failures.Count -gt 0) { throw ('Core audit failures: ' + ($failures -join ', ')) }
       - name: Temporary file retention observations
         if: always()
         run: |

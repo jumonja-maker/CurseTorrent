@@ -11,5 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(CurseTorrentRoot)/src/CurseTorrent.App/CurseTorrent.App.csproj" />
+    <Content Include="$(CurseTorrentRoot)/src/CurseTorrent.App/App.xaml" Link="AppTheme.xaml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

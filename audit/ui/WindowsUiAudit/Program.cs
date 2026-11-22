@@ -17,6 +17,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Windows.Markup;
+using System.Xml.Linq;
 using CurseTorrent.App;
 using CurseTorrent.Core;
 
@@ -26,18 +28,36 @@ internal static class Program
     private static int Main(string[] args)
     {
         var app = new AuditApplication(args.Length == 0 ? "ui-audit-output" : args[0]);
-        app.InitializeComponent();
         return app.Run();
     }
 }
 
-internal sealed class AuditApplication(string outputDirectory) : CurseTorrent.App.App
+internal sealed class AuditApplication : System.Windows.Application
 {
+    private readonly string _outputDirectory;
+    internal AuditApplication(string outputDirectory)
+    {
+        _outputDirectory = outputDirectory;
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        // Load the exact production resource definitions without constructing the
+        // production App, whose startup would create an engine and user profile.
+        XNamespace presentation = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+        XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
+        var source = XDocument.Load(Path.Combine(AppContext.BaseDirectory, "AppTheme.xaml"));
+        var resources = source.Root!.Element(presentation + "Application.Resources")!;
+        var dictionary = new XElement(presentation + "ResourceDictionary",
+            new XAttribute("xmlns", presentation.NamespaceName),
+            new XAttribute(XNamespace.Xmlns + "x", xaml.NamespaceName),
+            resources.Elements().Select(element => new XElement(element)));
+        using var reader = dictionary.CreateReader();
+        Resources = (ResourceDictionary)XamlReader.Load(reader);
+    }
+
     protected override async void OnStartup(StartupEventArgs e)
     {
         try
         {
-            await Audit.RunAsync(Path.GetFullPath(outputDirectory));
+            await Audit.RunAsync(Path.GetFullPath(_outputDirectory));
             Shutdown(0);
         }
         catch (Exception error)
