@@ -1,0 +1,86 @@
+name: Audit CurseTorrent 2026-11-22
+
+on:
+  push:
+    branches: [audit/2026-11-22]
+    paths: ['audit/**', '.github/workflows/audit.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  DOTNET_NOLOGO: '1'
+
+jobs:
+  windows-audit:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73
+        with:
+          dotnet-version: '10.0.x'
+      - name: Original integration suite
+        run: |
+          dotnet restore tests/CurseTorrent.Tests/CurseTorrent.Tests.csproj --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'Restore failed' }
+          dotnet run --project tests/CurseTorrent.Tests/CurseTorrent.Tests.csproj -c Release --no-restore
+          if ($LASTEXITCODE -ne 0) { throw 'Baseline verification failed' }
+      - name: V1 V2 hybrid and cold magnets
+        if: always()
+        run: |
+          dotnet run --project audit/network/NetworkAudit.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'Network compatibility audit failed' }
+      - name: Session integrity and metadata cancellation observations
+        if: always()
+        run: |
+          dotnet build audit/core/CoreAudit.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'Core audit build failed' }
+          foreach ($mode in @('changed-payload', 'session', 'save-failure', 'transitions', 'metadata-stop')) {
+            dotnet run --project audit/core/CoreAudit.csproj -c Release --no-build -- $mode
+            if ($LASTEXITCODE -ne 0) { throw "Core audit could not complete: $mode" }
+          }
+      - name: Temporary file retention observations
+        if: always()
+        run: |
+          dotnet build audit/security/repro/SecurityRepro.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'File retention audit build failed' }
+          foreach ($mode in @('existing', 'skipzero')) {
+            dotnet run --project audit/security/repro/SecurityRepro.csproj -c Release --no-build -- $mode
+            if ($LASTEXITCODE -ne 0) { throw "File retention audit could not complete: $mode" }
+          }
+      - name: Installer retry and retention observations
+        if: always()
+        run: |
+          powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File audit/security/InstallerAudit.ps1 -RepositoryRoot $PWD.Path
+          if ($LASTEXITCODE -ne 0) { throw 'Installer audit failed' }
+      - name: Actual WPF behavior and screenshots
+        if: always()
+        run: |
+          $ErrorActionPreference = 'Stop'
+          dotnet build audit/ui/WindowsUiAudit/WindowsUiAudit.csproj -c Release -m:1
+          if ($LASTEXITCODE -ne 0) { throw 'WPF audit build failed' }
+          $output = Join-Path $env:RUNNER_TEMP 'CurseTorrent-ui-audit'
+          New-Item -ItemType Directory -Path $output -Force | Out-Null
+          $app = Join-Path $PWD 'audit/ui/WindowsUiAudit/bin/Release/net10.0-windows/WindowsUiAudit.exe'
+          $process = Start-Process -FilePath $app -ArgumentList ('"' + $output + '"') -PassThru -RedirectStandardOutput (Join-Path $output 'stdout.txt') -RedirectStandardError (Join-Path $output 'stderr.txt')
+          $finished = $process.WaitForExit(120000)
+          if (-not $finished) { $process.Kill() }
+          $process.WaitForExit()
+          Get-Content (Join-Path $output 'stdout.txt') | Write-Host
+          Get-Content (Join-Path $output 'stderr.txt') | Write-Host
+          foreach ($file in Get-ChildItem $output -Filter '*.png') {
+            Write-Host ('AUDIT_IMAGE_BEGIN ' + $file.Name)
+            $encoded = [Convert]::ToBase64String([IO.File]::ReadAllBytes($file.FullName))
+            for ($i = 0; $i -lt $encoded.Length; $i += 6000) { Write-Host ('AUDIT_IMAGE_DATA ' + $encoded.Substring($i, [Math]::Min(6000, $encoded.Length - $i))) }
+            Write-Host ('AUDIT_IMAGE_END ' + $file.Name)
+          }
+          if (-not $finished) { throw 'WPF audit timed out' }
+          if ($process.ExitCode -ne 0) { throw "WPF audit process failed: $($process.ExitCode)" }

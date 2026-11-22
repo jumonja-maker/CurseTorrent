@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>CurseTorrent.Tests</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/CurseTorrent.Core/CurseTorrent.Core.csproj" />
+    <Compile Include="../../tests/CurseTorrent.Tests/LocalTracker.cs" Link="LocalTracker.cs" />
+  </ItemGroup>
+</Project>
