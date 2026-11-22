@@ -79,7 +79,11 @@ jobs:
             throw 'The native UI smoke check timed out.'
           }
           $process.WaitForExit()
-          if ($process.ExitCode -ne 0) { throw "Native UI smoke check failed: $($process.ExitCode)." }
+          if ($process.ExitCode -ne 0) {
+            $appLog = Join-Path $env:LOCALAPPDATA 'CurseTorrent/app.log'
+            if (Test-Path -LiteralPath $appLog) { Get-Content -LiteralPath $appLog -Raw | Write-Host }
+            throw "Native UI smoke check failed: $($process.ExitCode)."
+          }
           if (-not (Test-Path -LiteralPath $screenshot -PathType Leaf)) { throw 'The native UI screenshot was not created.' }
           & powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-install.ps1 -PackageDirectory $packageRoot
           if ($LASTEXITCODE -ne 0) { throw 'Windows PowerShell installation/retention check failed.' }
