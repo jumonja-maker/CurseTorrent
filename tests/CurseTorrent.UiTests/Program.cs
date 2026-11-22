@@ -321,9 +321,16 @@ internal static class UiTests
     {
         var viewer = Descendants<ScrollViewer>(grid).First(control => control.Name == "DG_ScrollViewer");
         var viewport = (ScrollContentPresenter)viewer.Template.FindName("PART_ScrollContentPresenter", viewer);
-        Rect[] rows = Descendants<DataGridRow>(grid).Where(row => row.IsVisible).Select(row => Bounds(row, viewport)).ToArray();
-        bool visible = rows.Any(row => row.Top >= -0.5 && row.Bottom <= viewport.ActualHeight + 0.5 && row.Height >= grid.RowHeight - 0.5);
-        Check(visible, name, new { grid = grid.Name, viewportHeight = viewport.ActualHeight, expectedRowHeight = grid.RowHeight, rows = rows.Select(row => new { row.Top, row.Bottom, row.Height }).ToArray() });
+        var window = Window.GetWindow(grid);
+        var workspace = (FrameworkElement)window.FindName("WorkspaceLayout");
+        _ = GetClientRect(new WindowInteropHelper(window).Handle, out var client);
+        double clientHeight = client.Bottom / VisualTreeHelper.GetDpi(window).DpiScaleY;
+        var rows = Descendants<DataGridRow>(grid).Where(row => row.IsVisible)
+            .Select(row => new { viewport = Bounds(row, viewport), workspace = Bounds(row, workspace), client = Bounds(row, window) }).ToArray();
+        bool visible = rows.Any(row => row.viewport.Top >= -0.5 && row.viewport.Bottom <= viewport.ActualHeight + 0.5 && row.viewport.Height >= grid.RowHeight - 0.5
+            && row.workspace.Top >= -0.5 && row.workspace.Bottom <= workspace.ActualHeight + 0.5 && row.client.Top >= -0.5 && row.client.Bottom <= clientHeight + 0.5);
+        Check(visible, name, new { grid = grid.Name, viewportHeight = viewport.ActualHeight, workspaceHeight = workspace.ActualHeight, clientHeight, expectedRowHeight = grid.RowHeight,
+            rows = rows.Select(row => new { row.viewport.Top, row.viewport.Bottom, row.viewport.Height, workspaceTop = row.workspace.Top, workspaceBottom = row.workspace.Bottom, clientBottom = row.client.Bottom }).ToArray() });
     }
     private static void CheckFooter(Window window, string buttonName, string name)
     {
