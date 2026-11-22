@@ -95,6 +95,8 @@ internal static class UiTests
         torrents.SelectedItem = torrents.Items.OfType<TorrentRow>().First(row => row.Id == "active");
         await Idle();
         Check(Descendants<Button>((FrameworkElement)main.FindName("Toolbar")).All(button => InClient(button, main)), "main actions fit initial window");
+        CheckVisibleRow(torrents, "torrent table has a fully visible row initially");
+        CheckVisibleRow(files, "file table has a fully visible row initially");
         SaveImage(main, Path.Combine(output, "01-main-files.png"));
 
         await ClickHeader(files, 1);
@@ -167,10 +169,16 @@ internal static class UiTests
             torrents.Columns.Select(column => new { column.Header, column.ActualWidth, column.MinWidth }).ToArray());
         Check(Descendants<Button>((FrameworkElement)main.FindName("Toolbar")).All(button => InClient(button, main)), "main actions fit minimum window");
         await CheckHorizontalScroll(torrents);
+        CheckVisibleRow(torrents, "minimum torrent table has a fully visible row");
+        CheckVisibleRow(files, "minimum file table has a fully visible row");
+        Check(InClient((Button)main.FindName("SettingsButton"), main) && InClient((TextBlock)main.FindName("VersionLabel"), main), "minimum sidebar settings and version remain visible");
         SaveImage(main, Path.Combine(output, "04-main-minimum.png"));
         main.Width = 980;
         main.Height = 700;
         await Idle();
+        Check(((TextBlock)main.FindName("CountLabel")).IsVisible && ((TextBlock)main.FindName("SearchCaption")).IsVisible, "enlarging restores the standard header");
+        CheckVisibleRow(torrents, "enlarged torrent table still has a fully visible row");
+        CheckVisibleRow(files, "enlarged file table still has a fully visible row");
 
         var settings = new SettingsWindow(service.Settings) { Owner = main };
         settings.Show();
@@ -308,6 +316,14 @@ internal static class UiTests
         var work = Forms.Screen.FromHandle(handle).WorkingArea;
         Check(bounds.Left >= work.Left && bounds.Top >= work.Top && bounds.Right <= work.Right && bounds.Bottom <= work.Bottom, name,
             new { window = new { bounds.Left, bounds.Top, bounds.Right, bounds.Bottom }, workArea = new { work.Left, work.Top, work.Right, work.Bottom } });
+    }
+    private static void CheckVisibleRow(DataGrid grid, string name)
+    {
+        var viewer = Descendants<ScrollViewer>(grid).First(control => control.Name == "DG_ScrollViewer");
+        var viewport = (ScrollContentPresenter)viewer.Template.FindName("PART_ScrollContentPresenter", viewer);
+        Rect[] rows = Descendants<DataGridRow>(grid).Where(row => row.IsVisible).Select(row => Bounds(row, viewport)).ToArray();
+        bool visible = rows.Any(row => row.Top >= -0.5 && row.Bottom <= viewport.ActualHeight + 0.5 && row.Height >= grid.RowHeight - 0.5);
+        Check(visible, name, new { grid = grid.Name, viewportHeight = viewport.ActualHeight, expectedRowHeight = grid.RowHeight, rows = rows.Select(row => new { row.Top, row.Bottom, row.Height }).ToArray() });
     }
     private static void CheckFooter(Window window, string buttonName, string name)
     {

@@ -9,9 +9,9 @@
     <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="35" /></Grid.RowDefinitions>
     <Grid.ColumnDefinitions><ColumnDefinition Width="196" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
     <Border Grid.RowSpan="2" Background="{DynamicResource SidebarBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
-      <Grid Margin="14,24,14,16">
+      <Grid x:Name="SidebarLayout" Margin="14,24,14,16">
         <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
-        <StackPanel Margin="10,0,0,33">
+        <StackPanel x:Name="BrandPanel" Margin="10,0,0,33">
           <StackPanel Orientation="Horizontal">
             <Border Width="30" Height="30" CornerRadius="8" Background="{DynamicResource AccentBrush}" Margin="0,0,9,0"><TextBlock Text="↓" Foreground="{DynamicResource CheckedTextBrush}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0" /></Border>
             <TextBlock Text="CURSE" FontSize="21" FontWeight="Bold" VerticalAlignment="Center" />
@@ -34,12 +34,12 @@
         </StackPanel>
       </Grid>
     </Border>
-    <Grid Grid.Column="1" Margin="26,25,26,0">
-      <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" MinHeight="70" /><RowDefinition Height="7" /><RowDefinition Height="0.65*" MinHeight="140" /></Grid.RowDefinitions>
+    <Grid x:Name="WorkspaceLayout" Grid.Column="1" Margin="26,25,26,0">
+      <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" MinHeight="116" /><RowDefinition Height="7" /><RowDefinition Height="0.65*" MinHeight="174" /></Grid.RowDefinitions>
       <Grid>
         <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="245" /></Grid.ColumnDefinitions>
-        <StackPanel><TextBlock Text="Загрузки" FontSize="28" FontWeight="SemiBold" /><TextBlock x:Name="CountLabel" Text="Добавьте первый торрент" Foreground="{DynamicResource MutedBrush}" Margin="0,7,0,0" /></StackPanel>
-        <StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="ПОИСК ПО ЗАГРУЗКАМ" Foreground="{DynamicResource MutedBrush}" FontSize="9" Margin="1,0,0,5" /><TextBox x:Name="SearchBox" TextChanged="OnSearchChanged" ToolTip="Поиск по названию торрента" AutomationProperties.Name="Поиск по названию торрента" /></StackPanel>
+        <StackPanel><TextBlock x:Name="HeadingLabel" Text="Загрузки" FontSize="28" FontWeight="SemiBold" ToolTip="{Binding Text, ElementName=CountLabel}" /><TextBlock x:Name="CountLabel" Text="Добавьте первый торрент" Foreground="{DynamicResource MutedBrush}" Margin="0,7,0,0" /></StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock x:Name="SearchCaption" Text="ПОИСК ПО ЗАГРУЗКАМ" Foreground="{DynamicResource MutedBrush}" FontSize="9" Margin="1,0,0,5" /><TextBox x:Name="SearchBox" TextChanged="OnSearchChanged" ToolTip="Поиск по названию торрента" AutomationProperties.Name="Поиск по названию торрента" /></StackPanel>
       </Grid>
       <WrapPanel x:Name="Toolbar" Grid.Row="1" Margin="0,22,0,16">
         <Button Content="＋  Торрент" Style="{StaticResource PrimaryButton}" Click="OnAddTorrent" Margin="0,0,7,5" ToolTip="Открыть .torrent (Ctrl+O)" />
@@ -71,7 +71,7 @@
         </Grid>
       </Border>
       <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" />
-      <Border Grid.Row="4" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Margin="0,1,0,16">
+      <Border x:Name="DetailsPanel" Grid.Row="4" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Margin="0,1,0,16">
         <Grid>
           <TextBlock x:Name="NoSelection" Text="Выберите торрент, чтобы посмотреть файлы и сведения" Foreground="{DynamicResource MutedBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
           <TabControl x:Name="DetailsTabs" Visibility="Collapsed" Margin="6,0,6,6">
@@ -85,7 +85,7 @@
                     <DataGridTemplateColumn Header="ПРИОРИТЕТ" Width="151" MinWidth="151" SortMemberPath="Priority"><DataGridTemplateColumn.CellTemplate><DataTemplate><ComboBox ItemsSource="{Binding Priorities}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Приоритет файла" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
                   </DataGrid.Columns>
                 </DataGrid>
-                <TextBlock x:Name="FilesHint" Grid.Row="1" Foreground="{DynamicResource MutedBrush}" FontSize="11" TextWrapping="Wrap" Margin="12,5,12,3" />
+                <TextBlock x:Name="FilesHint" Grid.Row="1" Foreground="{DynamicResource MutedBrush}" FontSize="11" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Margin="12,5,12,3" />
               </Grid>
             </TabItem>
             <TabItem Header="Сведения">

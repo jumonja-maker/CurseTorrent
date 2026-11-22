@@ -35,6 +35,7 @@ public partial class MainWindow : Window
     private bool _exiting;
     private bool _allowClose;
     private bool _trayHintShown;
+    private bool? _compactLayout;
     private DateTime _statusUntil;
     private string? _fileTorrentId;
     private string _filter = "all";
@@ -46,6 +47,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         VersionLabel.Text = $"CurseTorrent {typeof(App).Assembly.GetName().Version?.ToString(3) ?? "—"}";
         WindowTheme.Attach(this);
+        MainLayout.SizeChanged += (_, _) => UpdateCompactLayout();
         _view = CollectionViewSource.GetDefaultView(_rows);
         _view.Filter = MatchesFilter;
         TorrentGrid.ItemsSource = _view;
@@ -59,8 +61,27 @@ public partial class MainWindow : Window
         FilesGrid.ItemsSource = _filesView;
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += (_, _) => Refresh();
-        Loaded += (_, _) => { Refresh(); _timer.Start(); };
+        Loaded += (_, _) => { UpdateCompactLayout(); Refresh(); _timer.Start(); };
         if (!smokeTest) CreateTray();
+    }
+
+    private void UpdateCompactLayout()
+    {
+        if (MainLayout.ActualHeight <= 0) return;
+        // Preserve usable rows when a small monitor or DPI scaling limits the client area.
+        // The actual client height also covers native title-bar and taskbar differences.
+        bool compact = MainLayout.ActualHeight < 560;
+        if (_compactLayout == compact) return;
+        _compactLayout = compact;
+        WorkspaceLayout.Margin = new Thickness(26, compact ? 12 : 25, 26, 0);
+        Toolbar.Margin = compact ? new Thickness(0, 8, 0, 8) : new Thickness(0, 22, 0, 16);
+        HeadingLabel.FontSize = compact ? 24 : 28;
+        CountLabel.Visibility = SearchCaption.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+        SearchBox.Height = compact ? 35 : double.NaN;
+        DetailsPanel.Margin = new Thickness(0, 1, 0, compact ? 8 : 16);
+        SidebarLayout.Margin = compact ? new Thickness(14, 12, 14, 12) : new Thickness(14, 24, 14, 16);
+        BrandPanel.Margin = new Thickness(10, 0, 0, compact ? 16 : 33);
+        VersionLabel.Margin = new Thickness(9, compact ? 10 : 16, 0, 0);
     }
 
     public void ShowAndActivate()
